@@ -8,7 +8,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>br.edu.ifrn.scatal</groupId>
-  <artifactId>Scatal-Services</artifactId>
+  <artifactId>scatalapi</artifactId>
   <name>WSO2 MSF4J Microservice</name>
   <version>0.1-SNAPSHOT</version>
   <build>
@@ -21,17 +21,17 @@
           <appName>scatalapi</appName>
           <includeTarget>false</includeTarget>
           <includes>
-            <include>target/Scatal-Services-0.1-SNAPSHOT.jar</include>
+            <include>target/scatalapi-0.1-SNAPSHOT.jar</include>
           </includes>
           <processTypes>
-            <web>java -jar target/Scatal-Services-0.1-SNAPSHOT.jar $PORT</web>
+            <web>java -jar target/scatalapi-0.1-SNAPSHOT.jar $PORT</web>
           </processTypes>
         </configuration>
       </plugin>
     </plugins>
   </build>
   <properties>
-    <microservice.mainClass>br.edu.ifrn.scatal.service.Application</microservice.mainClass>
+    <microservice.mainClass>br.edu.ifrn.scatalapi.service.Application</microservice.mainClass>
   </properties>
 </project>
 
