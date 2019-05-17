@@ -31,7 +31,7 @@ public class Application {
 		}
     	MicroservicesRunner runner = new MicroservicesRunner(porta);
         
-        runner.deploy(new AlunoService());
+        runner.deploy(new AlunoService(), new AutenticacaoService());
         
         runner.start();
     }
