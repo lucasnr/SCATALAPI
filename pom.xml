@@ -29,6 +29,12 @@
 		<!-- Uncomment the following if you want to enable metrics & monitoring -->
 		<!-- <dependency> <groupId>org.wso2.msf4j</groupId> <artifactId>msf4j-analytics</artifactId> 
 			</dependency> -->
+			
+		<dependency>
+			<groupId>io.github.lucasnr</groupId>
+			<artifactId>suapi-simple</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<properties>
