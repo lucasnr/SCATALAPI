@@ -12,7 +12,8 @@ public class AutenticacaoToken {
 		String senha = aluno.getSenha();
 		
 		try {
-			new ClienteSUAP(matricula, senha);
+			ClienteSUAP cliente = new ClienteSUAP(matricula, senha);
+			this.token = cliente.getTOKEN();
 		} catch (FalhaAoConectarComSUAPException e) {
 			e.printStackTrace();
 		}
