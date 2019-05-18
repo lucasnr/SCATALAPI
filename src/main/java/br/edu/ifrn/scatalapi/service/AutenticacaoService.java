@@ -6,8 +6,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.edu.ifrn.scatalapi.exception.CredenciaisIncorretasException;
 import br.edu.ifrn.scatalapi.model.AlunoLoginDTO;
-import br.edu.ifrn.scatalapi.model.AutenticacaoToken;
+import br.edu.ifrn.scatalapi.model.Token;
 
 @Path("/login")
 public class AutenticacaoService {
@@ -16,7 +17,12 @@ public class AutenticacaoService {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-    public AutenticacaoToken post(AlunoLoginDTO aluno) {
-    	return new AutenticacaoToken(aluno);
+    public Token post(AlunoLoginDTO aluno) {
+    	try {
+			Token token = new Token(aluno);
+			return token;
+		} catch (CredenciaisIncorretasException e) {
+			return null;
+		}
     }
 }
