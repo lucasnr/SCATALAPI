@@ -16,9 +16,6 @@
 
 package br.edu.ifrn.scatalapi.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,24 +27,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import br.edu.ifrn.scatalapi.model.Aluno;
+import br.edu.ifrn.scatalapi.model.Token;
+import br.edu.ifrn.suapi.model.AlunoSUAP;
 
 @Path("/aluno")
-public class AlunoService {
+public class AlunoService implements Service{
 
     @GET
-    @Path("/")
+    @Path("/dados")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Aluno> get() {
-		Aluno aluno1 = new Aluno("Lucas", "20161164010023");
-		Aluno aluno2 = new Aluno("Maria", "20161164010015");
-		Aluno aluno3 = new Aluno("Daniel", "20161164010033");
-		
-		List<Aluno> alunos = new ArrayList<>();
-		alunos.add(aluno1);
-		alunos.add(aluno2);
-		alunos.add(aluno3);
-		
-		return alunos;
+    public AlunoSUAP get(Token token) {
+		return token.getUsuario(AlunoSUAP.class);
     }
 
     @POST
