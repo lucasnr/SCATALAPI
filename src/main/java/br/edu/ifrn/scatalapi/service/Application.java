@@ -16,6 +16,9 @@
 
 package br.edu.ifrn.scatalapi.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.wso2.msf4j.MicroservicesRunner;
 
 /**
@@ -31,7 +34,13 @@ public class Application {
 		}
     	MicroservicesRunner runner = new MicroservicesRunner(porta);
         
-        runner.deploy(new AlunoService(), new AutenticacaoService());
+    	List<Service> services = new ArrayList<>();
+    	services.add(new AlunoService());
+    	services.add(new AutenticacaoService());
+    	
+    	for (Service service : services) {
+			runner.deploy(service);
+		}
         
         runner.start();
     }
