@@ -19,14 +19,13 @@ package br.edu.ifrn.scatalapi.service;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
@@ -35,18 +34,17 @@ public class AlunoService implements Service{
 
     @GET
     @Path("/dados")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public AlunoSUAP get(Token token) {
-		return token.getUsuario(AlunoSUAP.class);
+    public AlunoSUAP get(@HeaderParam(value = "token") String token) {
+    	System.out.println(token);
+    	Token tokenObject = new Token(token);
+		return tokenObject.getUsuario(AlunoSUAP.class);
     }
 
     @POST
     @Path("/salvar")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response post(Aluno aluno) {
-    	System.out.println(aluno.getNome() + ": " + aluno.getMatricula());
-    	return Response.ok().build();
+    public void post() {
     }
 
     @PUT

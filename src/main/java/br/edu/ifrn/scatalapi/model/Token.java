@@ -28,6 +28,11 @@ public class Token {
 		this.valido = isValido;
 		this.conteudo = conteudo;
 	}
+	
+	public Token(String token) {
+		this.conteudo = token;
+		this.valido = true;
+	}
 
 	public String getToken() {
 		return conteudo;
