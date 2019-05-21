@@ -1,4 +1,4 @@
-package br.edu.ifrn.scatalapi.model.dto;
+package br.edu.ifrn.scatalapi.model;
 
 public class Credenciais {
 

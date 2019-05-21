@@ -1,6 +1,5 @@
 package br.edu.ifrn.scatalapi.model;
 
-import br.edu.ifrn.scatalapi.model.dto.Credenciais;
 import br.edu.ifrn.suapi.ClienteSUAP;
 import br.edu.ifrn.suapi.exception.CredenciaisIncorretasException;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
