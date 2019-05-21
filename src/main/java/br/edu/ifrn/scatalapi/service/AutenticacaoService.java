@@ -9,8 +9,8 @@ import javax.ws.rs.core.MediaType;
 import br.edu.ifrn.scatalapi.dao.AlunoDAO;
 import br.edu.ifrn.scatalapi.dao.DAOFactory;
 import br.edu.ifrn.scatalapi.model.Aluno;
+import br.edu.ifrn.scatalapi.model.Credenciais;
 import br.edu.ifrn.scatalapi.model.Token;
-import br.edu.ifrn.scatalapi.model.dto.Credenciais;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
 @Path("/login")
