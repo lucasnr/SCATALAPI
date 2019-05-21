@@ -38,10 +38,13 @@ public class AutenticacaoService implements Service {
 		Aluno aluno = dao.buscaPorMatricula(matricula);
 		boolean usuarioNaoExiste = aluno == null;
 		
+		boolean salvouUsuario = false;
 		if (usuarioNaoExiste) {
 			aluno = new Aluno(alunoSUAP);
-			return dao.salvar(aluno);
-		} else
-			return false;
+			salvouUsuario = dao.salvar(aluno);
+		}
+		
+		dao.close();
+		return salvouUsuario;
 	}
 }
