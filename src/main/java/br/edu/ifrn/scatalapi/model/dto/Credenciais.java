@@ -1,11 +1,11 @@
-package br.edu.ifrn.scatalapi.model;
+package br.edu.ifrn.scatalapi.model.dto;
 
-public class AlunoLoginDTO {
+public class Credenciais {
 
 	private String matricula;
 	private String senha;
 
-	public AlunoLoginDTO(String matricula, String senha) {
+	public Credenciais(String matricula, String senha) {
 		super();
 		this.matricula = matricula;
 		this.senha = senha;

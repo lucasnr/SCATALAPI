@@ -26,6 +26,7 @@ import org.wso2.msf4j.MicroservicesRunner;
  *
  * @since 0.1-SNAPSHOT
  */
+
 public class Application {
     public static void main(String[] args) {
         int porta = 9090;

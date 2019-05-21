@@ -1,16 +1,19 @@
 package br.edu.ifrn.scatalapi.model;
 
+import br.edu.ifrn.scatalapi.model.dto.Credenciais;
 import br.edu.ifrn.suapi.ClienteSUAP;
 import br.edu.ifrn.suapi.exception.CredenciaisIncorretasException;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
+import br.edu.ifrn.suapi.exception.TokenInvalidoException;
 import br.edu.ifrn.suapi.model.UsuarioSUAP;
 
 public class Token {
 
 	private final String conteudo;
 	private final boolean valido;
+	private transient ClienteSUAP clienteSUAP;
 	
-	public Token(AlunoLoginDTO aluno) {
+	public Token(Credenciais aluno) {
 		String matricula = aluno.getMatricula();
 		String senha = aluno.getSenha();
 		
@@ -21,6 +24,7 @@ public class Token {
 			ClienteSUAP cliente = new ClienteSUAP(matricula, senha);
 			conteudo = cliente.getTOKEN();
 			isValido = true;
+			this.clienteSUAP = cliente;
 		} catch (FalhaAoConectarComSUAPException | CredenciaisIncorretasException e) {
 			conteudo = e.getMessage();
 		}
@@ -30,8 +34,20 @@ public class Token {
 	}
 	
 	public Token(String token) {
-		this.conteudo = token;
-		this.valido = true;
+		String conteudo = token;
+		boolean isValido = true;
+		
+		ClienteSUAP clienteSUAP = null;
+		try {
+			clienteSUAP = new ClienteSUAP(token);
+		} catch (TokenInvalidoException | FalhaAoConectarComSUAPException e) {
+			conteudo = e.getMessage();
+			isValido = false;
+		}
+		
+		this.clienteSUAP = clienteSUAP;
+		this.conteudo = conteudo;
+		this.valido = isValido;
 	}
 
 	public String getToken() {
@@ -43,7 +59,6 @@ public class Token {
 	}
 	
 	public <T extends UsuarioSUAP> T getUsuario(Class<T> clazz) {
-		ClienteSUAP cliente = new ClienteSUAP(this.conteudo);
-		return cliente.getUsuario(clazz);
+		return this.clienteSUAP.getUsuario(clazz);
 	}
 }

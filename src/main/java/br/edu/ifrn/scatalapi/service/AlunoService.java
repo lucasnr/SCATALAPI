@@ -36,7 +36,6 @@ public class AlunoService implements Service{
     @Path("/dados")
     @Produces(MediaType.APPLICATION_JSON)
     public AlunoSUAP get(@HeaderParam(value = "token") String token) {
-    	System.out.println(token);
     	Token tokenObject = new Token(token);
 		return tokenObject.getUsuario(AlunoSUAP.class);
     }
