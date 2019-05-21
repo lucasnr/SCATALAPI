@@ -56,7 +56,7 @@ public class Aluno implements Serializable {
 	@Column(name = "REGISTRO")
 	private Date registro;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CURSO_ID")
 	private Curso curso;
 
