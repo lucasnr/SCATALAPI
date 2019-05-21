@@ -15,8 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -63,11 +61,6 @@ public class Aluno implements Serializable {
 	@OneToMany(mappedBy = "aluno", fetch = FetchType.LAZY)
 	private Set<Email> emails = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "INTERESSE", joinColumns = {
-			@JoinColumn(name = "ALUNO_ID") }, inverseJoinColumns = @JoinColumn(name = "DISCIPLINA_ID"))
-	private List<Disciplina> interesses = new ArrayList<>();
-
 	@OneToMany(mappedBy = "criador", fetch = FetchType.LAZY)
 	@OrderBy("registro desc")
 	private List<Postagem> postagens = new ArrayList<>();
@@ -104,11 +97,6 @@ public class Aluno implements Serializable {
 		this.addEmail(email);
 
 		this.clienteSUAP = aluno.getClienteSUAP();
-	}
-
-	public void addInteresse(Disciplina tema) {
-		if (!this.interesses.contains(tema))
-			this.interesses.add(tema);
 	}
 
 	public void addEmail(Email email) {
@@ -157,10 +145,6 @@ public class Aluno implements Serializable {
 
 	public Set<Email> getEmails() {
 		return Collections.unmodifiableSet(emails);
-	}
-
-	public List<Disciplina> getInteresses() {
-		return Collections.unmodifiableList(interesses);
 	}
 
 	public void setClienteSUAP(ClienteSUAP cliente) {
