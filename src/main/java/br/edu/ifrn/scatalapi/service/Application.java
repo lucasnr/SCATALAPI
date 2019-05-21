@@ -38,6 +38,7 @@ public class Application {
     	List<Service> services = new ArrayList<>();
     	services.add(new AlunoService());
     	services.add(new AutenticacaoService());
+    	services.add(new TutoriaService());
     	
     	for (Service service : services) {
 			runner.deploy(service);
