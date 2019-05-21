@@ -23,27 +23,40 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import br.edu.ifrn.scatalapi.dao.AlunoDAO;
+import br.edu.ifrn.scatalapi.dao.DAOFactory;
+import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Token;
-import br.edu.ifrn.suapi.model.AlunoSUAP;
+import br.edu.ifrn.scatalapi.model.dto.AlunoDadosDTO;
 
 @Path("/aluno")
 public class AlunoService implements Service{
 
     @GET
-    @Path("/dados")
+    @Path("/{matricula}")
     @Produces(MediaType.APPLICATION_JSON)
-    public AlunoSUAP get(@HeaderParam(value = "token") String token) {
+    public AlunoDadosDTO get(@HeaderParam(value = "token") String token, @PathParam("matricula") String matricula) {
     	Token tokenObject = new Token(token);
-		return tokenObject.getUsuario(AlunoSUAP.class);
+    	if (! tokenObject.isValido()) {
+			return null;
+		}
+    	
+    	AlunoDAO dao = new DAOFactory().getAlunoDAO();
+    	Aluno aluno = dao.buscaPorMatricula(matricula);
+    	dao.close();
+    	return new AlunoDadosDTO(aluno);
     }
 
     @POST
-    @Path("/salvar")
+    @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public void post() {
+        // TODO: Implementation for HTTP POST request
+        System.out.println("POST invoked");
     }
 
     @PUT
