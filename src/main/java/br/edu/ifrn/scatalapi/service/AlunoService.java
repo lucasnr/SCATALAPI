@@ -31,7 +31,7 @@ import br.edu.ifrn.scatalapi.dao.AlunoDAO;
 import br.edu.ifrn.scatalapi.dao.DAOFactory;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Token;
-import br.edu.ifrn.scatalapi.model.dto.AlunoDadosDTO;
+import br.edu.ifrn.scatalapi.model.dto.AlunoDTO;
 
 @Path("/aluno")
 public class AlunoService implements Service{
@@ -39,7 +39,7 @@ public class AlunoService implements Service{
     @GET
     @Path("/{matricula}")
     @Produces(MediaType.APPLICATION_JSON)
-    public AlunoDadosDTO get(@HeaderParam(value = "token") String token, @PathParam("matricula") String matricula) {
+    public AlunoDTO get(@HeaderParam(value = "token") String token, @PathParam("matricula") String matricula) {
     	Token tokenObject = new Token(token);
     	if (! tokenObject.isValido()) {
 			return null;
@@ -48,7 +48,7 @@ public class AlunoService implements Service{
     	AlunoDAO dao = new DAOFactory().getAlunoDAO();
     	Aluno aluno = dao.buscaPorMatricula(matricula);
     	dao.close();
-    	return new AlunoDadosDTO(aluno);
+    	return new AlunoDTO(aluno);
     }
 
     @POST
