@@ -8,27 +8,27 @@ import br.edu.ifrn.scatalapi.dao.hibernate.TutoriaHibernateDAO;
 
 public class DAOFactory {
 
-	public AlunoDAO getAlunoDAO() {
+	public static AlunoDAO getAlunoDAO() {
 		AlunoDAO dao = new AlunoHibernateDAO();
 		return dao;
 	}
 	
-	public CursoDAO getCursoDAO() {
+	public static CursoDAO getCursoDAO() {
 		CursoDAO dao = new CursoHibernateDAO();
 		return dao;
 	}
 	
-	public DisciplinaDAO getDisciplinaDAO() {
+	public static DisciplinaDAO getDisciplinaDAO() {
 		DisciplinaDAO dao = new DisciplinaHibernateDAO();
 		return dao;
 	}
 	
-	public PostagemDAO getPostagemDAO() {
+	public static PostagemDAO getPostagemDAO() {
 		PostagemDAO dao = new PostagemHibernateDAO();
 		return dao;
 	}
 	
-	public TutoriaDAO getTutoriaDAO() {
+	public static TutoriaDAO getTutoriaDAO() {
 		TutoriaDAO dao = new TutoriaHibernateDAO();
 		return dao;
 	}

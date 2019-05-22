@@ -34,42 +34,42 @@ import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.scatalapi.model.dto.AlunoDTO;
 
 @Path("/aluno")
-public class AlunoService implements Service{
+public class AlunoService implements Service {
 
-    @GET
-    @Path("/{matricula}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public AlunoDTO get(@HeaderParam(value = "token") String token, @PathParam("matricula") String matricula) {
-    	Token tokenObject = new Token(token);
-    	if (! tokenObject.isValido()) {
+	@GET
+	@Path("/{matricula}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public AlunoDTO get(@HeaderParam(value = "token") String tokenConteudo, @PathParam("matricula") String matricula) {
+		Token tokenObject = new Token(tokenConteudo);
+		if (!tokenObject.isValido()) {
 			return null;
 		}
-    	
-    	AlunoDAO dao = new DAOFactory().getAlunoDAO();
-    	Aluno aluno = dao.buscaPorMatricula(matricula);
-    	dao.close();
-    	return new AlunoDTO(aluno);
-    }
 
-    @POST
-    @Path("/")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void post() {
-        // TODO: Implementation for HTTP POST request
-        System.out.println("POST invoked");
-    }
+		AlunoDAO dao = DAOFactory.getAlunoDAO();
+		Aluno aluno = dao.buscaPorMatricula(matricula);
+		dao.close();
+		return new AlunoDTO(aluno);
+	}
 
-    @PUT
-    @Path("/")
-    public void put() {
-        // TODO: Implementation for HTTP PUT request
-        System.out.println("PUT invoked");
-    }
+	@POST
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void post() {
+		// TODO: Implementation for HTTP POST request
+		System.out.println("POST invoked");
+	}
 
-    @DELETE
-    @Path("/")
-    public void delete() {
-        // TODO: Implementation for HTTP DELETE request
-        System.out.println("DELETE invoked");
-    }
+	@PUT
+	@Path("/")
+	public void put() {
+		// TODO: Implementation for HTTP PUT request
+		System.out.println("PUT invoked");
+	}
+
+	@DELETE
+	@Path("/")
+	public void delete() {
+		// TODO: Implementation for HTTP DELETE request
+		System.out.println("DELETE invoked");
+	}
 }

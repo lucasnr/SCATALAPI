@@ -14,7 +14,7 @@ public class TutoriaHibernateDAO extends AbstractHibernateDAO<Tutoria> implement
 
 	@Override
 	public Tutoria buscaPorNomeDaDisciplina(String nomeDaDisciplina) {
-		DisciplinaDAO disciplinaDAO = new DAOFactory().getDisciplinaDAO();
+		DisciplinaDAO disciplinaDAO = DAOFactory.getDisciplinaDAO();
 		Disciplina disciplina = disciplinaDAO.buscaPorNome(nomeDaDisciplina);
 		if (disciplina == null) {
 			return null;

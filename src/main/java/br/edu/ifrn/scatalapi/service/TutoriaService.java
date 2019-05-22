@@ -1,6 +1,7 @@
 package br.edu.ifrn.scatalapi.service;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -27,22 +28,29 @@ public class TutoriaService implements Service {
 		String titulo = duvida.getTitulo();
 		Integer idDoAluno = duvida.getIdDoAluno();
 
-		DAOFactory factory = new DAOFactory();
-		AlunoDAO alunoDAO = factory.getAlunoDAO();
+		AlunoDAO alunoDAO = DAOFactory.getAlunoDAO();
 		Aluno criador = alunoDAO.buscaPorId(idDoAluno);
 		alunoDAO.close();
 
-		TutoriaDAO tutoriaDAO = factory.getTutoriaDAO();
+		TutoriaDAO tutoriaDAO = DAOFactory.getTutoriaDAO();
 		Tutoria tutoria = tutoriaDAO.buscaPorNomeDaDisciplina(nomeDaDisciplina);
 		tutoriaDAO.close();
 		
 		Postagem postagem = new Postagem(titulo, descricao);
 		postagem.setCriador(criador);
 		postagem.setTutoria(tutoria);
-		PostagemDAO postagemDAO = factory.getPostagemDAO();
+		PostagemDAO postagemDAO = DAOFactory.getPostagemDAO();
 		boolean salvou = postagemDAO.salvar(postagem);
 		postagemDAO.close();
 
 		return salvou ? Response.ok().build() : Response.serverError().build();
+	}
+	
+	@DELETE
+	@Path("/{nome}/duvida/{id}")
+	public Response removeDuvida(@PathParam("nome") String nomeDaDisciplina, @PathParam("id") Integer idDaDuvida) {
+		
+		
+		return null;
 	}
 }

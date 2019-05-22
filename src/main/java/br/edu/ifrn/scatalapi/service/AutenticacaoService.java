@@ -34,7 +34,7 @@ public class AutenticacaoService implements Service {
 	}
 
 	private boolean salvaAlunoCasoNaoExista(AlunoSUAP alunoSUAP, String matricula) {
-		AlunoDAO dao = new DAOFactory().getAlunoDAO();
+		AlunoDAO dao = DAOFactory.getAlunoDAO();
 		Aluno aluno = dao.buscaPorMatricula(matricula);
 		boolean usuarioNaoExiste = aluno == null;
 		
