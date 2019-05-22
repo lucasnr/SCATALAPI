@@ -23,8 +23,6 @@ public class TutoriaService implements Service {
 	@Path("/{nome}/duvida/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response postarNovaDuvida(DuvidaDTO duvida, @PathParam("nome") String nomeDaDisciplina) {
-//		System.out.println(nomeDaDisciplina); NOME NÃO ESTÁ EM UTF-8
-		
 		String descricao = duvida.getDescricao();
 		String titulo = duvida.getTitulo();
 		Integer idDoAluno = duvida.getIdDoAluno();
