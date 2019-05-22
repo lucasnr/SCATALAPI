@@ -36,8 +36,8 @@ public class Application {
     	MicroservicesRunner runner = new MicroservicesRunner(porta);
         
     	List<Service> services = new ArrayList<>();
-    	services.add(new AlunoService());
     	services.add(new AutenticacaoService());
+    	services.add(new AlunoService());
     	services.add(new TutoriaService());
     	
     	for (Service service : services) {
