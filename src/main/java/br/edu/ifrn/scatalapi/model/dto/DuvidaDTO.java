@@ -1,8 +1,11 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 public class DuvidaDTO {
 	private String titulo;
 	private String descricao;
+	@SerializedName("aluno_id")
 	private Integer idDoAluno;
 
 	public String getTitulo() {
