@@ -1,9 +1,8 @@
 package br.edu.ifrn.scatalapi.dao.hibernate;
 
-import br.edu.ifrn.scatalapi.dao.DAOFactory;
-import br.edu.ifrn.scatalapi.dao.DisciplinaDAO;
+import org.hibernate.query.Query;
+
 import br.edu.ifrn.scatalapi.dao.TutoriaDAO;
-import br.edu.ifrn.scatalapi.model.Disciplina;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 
 public class TutoriaHibernateDAO extends AbstractHibernateDAO<Tutoria> implements TutoriaDAO {
@@ -14,14 +13,21 @@ public class TutoriaHibernateDAO extends AbstractHibernateDAO<Tutoria> implement
 
 	@Override
 	public Tutoria buscaPorNomeDaDisciplina(String nomeDaDisciplina) {
-		DisciplinaDAO disciplinaDAO = DAOFactory.getDisciplinaDAO();
-		Disciplina disciplina = disciplinaDAO.buscaPorNome(nomeDaDisciplina);
-		if (disciplina == null) {
-			return null;
-		}
+		Tutoria tutoria = null;
 		
-		Tutoria tutoria = disciplina.getTutoria();
-		disciplinaDAO.close();
+//		DisciplinaDAO disciplinaDAO = DAOFactory.getDisciplinaDAO();
+//		Disciplina disciplina = disciplinaDAO.buscaPorNome(nomeDaDisciplina);
+//		if (disciplina == null) {
+//			return null;
+//		}
+//		
+//		tutoria = disciplina.getTutoria();
+//		disciplinaDAO.close();
+		
+		Query<Tutoria> query = super.session.createQuery("SELECT t FROM Tutoria t WHERE t.disciplina.nome = :nomeDaDisciplina", clazz);
+		query.setParameter("nomeDaDisciplina", nomeDaDisciplina);
+		tutoria = query.uniqueResult();
+		
 		return tutoria;
 	}
 
