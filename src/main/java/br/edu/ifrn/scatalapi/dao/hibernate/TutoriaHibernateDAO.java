@@ -31,4 +31,12 @@ public class TutoriaHibernateDAO extends AbstractHibernateDAO<Tutoria> implement
 		return tutoria;
 	}
 
+	@Override
+	public Tutoria buscaPorNomeUsualDaDisciplina(String nomeUsualDaDisciplina) {
+		Query<Tutoria> query = super.session.createQuery("SELECT t FROM Tutoria t WHERE t.disciplina.nomeUsual = :nomeUsualDaDisciplina", clazz);
+		query.setParameter("nomeUsualDaDisciplina", nomeUsualDaDisciplina);
+		Tutoria tutoria = query.uniqueResult();
+		return tutoria;
+	}
+
 }

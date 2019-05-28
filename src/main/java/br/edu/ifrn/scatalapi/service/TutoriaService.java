@@ -21,19 +21,21 @@ import br.edu.ifrn.scatalapi.model.dto.DuvidaDTO;
 public class TutoriaService implements Service {
 
 	@POST
-	@Path("/{nome}/duvida/")
+	@Path("/{disciplina}/duvida/")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response postarNovaDuvida(DuvidaDTO duvida, @PathParam("nome") String nomeDaDisciplina) {
+	public Response postarNovaDuvida(DuvidaDTO duvida, @PathParam("disciplina") String nomeUsualDaDisciplina) {
 		String descricao = duvida.getDescricao();
 		String titulo = duvida.getTitulo();
 		Integer idDoAluno = duvida.getIdDoAluno();
+		
+		System.out.println(nomeUsualDaDisciplina);
 
 		AlunoDAO alunoDAO = DAOFactory.getAlunoDAO();
 		Aluno criador = alunoDAO.buscaPorId(idDoAluno);
 		alunoDAO.close();
 
 		TutoriaDAO tutoriaDAO = DAOFactory.getTutoriaDAO();
-		Tutoria tutoria = tutoriaDAO.buscaPorNomeDaDisciplina(nomeDaDisciplina);
+		Tutoria tutoria = tutoriaDAO.buscaPorNomeUsualDaDisciplina(nomeUsualDaDisciplina);
 		tutoriaDAO.close();
 		
 		Postagem postagem = new Postagem(titulo, descricao);
@@ -47,7 +49,7 @@ public class TutoriaService implements Service {
 	}
 	
 	@DELETE
-	@Path("/{nome}/duvida/{id}")
+	@Path("/{disciplina}/duvida/{id}")
 	public Response removeDuvida(@PathParam("nome") String nomeDaDisciplina, @PathParam("id") Integer idDaDuvida) {
 		
 		
