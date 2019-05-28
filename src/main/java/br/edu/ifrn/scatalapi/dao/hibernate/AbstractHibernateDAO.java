@@ -15,7 +15,7 @@ import br.edu.ifrn.scatalapi.dao.AbstractDAO;
 
 public class AbstractHibernateDAO<T> implements AbstractDAO<T>{
 	protected Session session;
-	private final Class<T> clazz;
+	protected final Class<T> clazz;
 
 	public final void init() {
 		this.session = SessionFactorySingleton.getInstance().openSession();
