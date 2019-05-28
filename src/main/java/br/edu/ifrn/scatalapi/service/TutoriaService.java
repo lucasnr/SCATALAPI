@@ -24,28 +24,46 @@ public class TutoriaService implements Service {
 	@Path("/{disciplina}/duvida/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response postarNovaDuvida(DuvidaDTO duvida, @PathParam("disciplina") String nomeUsualDaDisciplina) {
+		Aluno aluno = pegaAlunoDaDuvida(duvida);
+		Tutoria tutoria = pegaTutoriaDaDuvida(nomeUsualDaDisciplina);
+		Postagem postagem = criaPostagem(duvida, aluno, tutoria);
+		
+		boolean salvou = salvaPostagem(postagem);
+		return salvou ? Response.ok("Sucesso").build() : Response.serverError().build();
+	}
+
+	private boolean salvaPostagem(Postagem postagem) {
+		PostagemDAO postagemDAO = DAOFactory.getPostagemDAO();
+		boolean salvou = postagemDAO.salvar(postagem);
+		postagemDAO.close();
+		return salvou;
+	}
+
+	private Postagem criaPostagem(DuvidaDTO duvida, Aluno criador, Tutoria tutoria) {
 		String descricao = duvida.getDescricao();
 		String titulo = duvida.getTitulo();
-		Integer idDoAluno = duvida.getIdDoAluno();
-		
-		System.out.println(nomeUsualDaDisciplina);
-
-		AlunoDAO alunoDAO = DAOFactory.getAlunoDAO();
-		Aluno criador = alunoDAO.buscaPorId(idDoAluno);
-		alunoDAO.close();
-
-		TutoriaDAO tutoriaDAO = DAOFactory.getTutoriaDAO();
-		Tutoria tutoria = tutoriaDAO.buscaPorNomeUsualDaDisciplina(nomeUsualDaDisciplina);
-		tutoriaDAO.close();
 		
 		Postagem postagem = new Postagem(titulo, descricao);
 		postagem.setCriador(criador);
 		postagem.setTutoria(tutoria);
-		PostagemDAO postagemDAO = DAOFactory.getPostagemDAO();
-		boolean salvou = postagemDAO.salvar(postagem);
-		postagemDAO.close();
+		
+		return postagem;
+	}
 
-		return salvou ? Response.ok().build() : Response.serverError().build();
+	private Tutoria pegaTutoriaDaDuvida(String nomeUsualDaDisciplina) {
+		TutoriaDAO tutoriaDAO = DAOFactory.getTutoriaDAO();
+		Tutoria tutoria = tutoriaDAO.buscaPorNomeUsualDaDisciplina(nomeUsualDaDisciplina);
+		tutoriaDAO.close();
+		return tutoria;
+	}
+
+	private Aluno pegaAlunoDaDuvida(DuvidaDTO duvida) {
+		Integer idDoAluno = duvida.getIdDoAluno();
+
+		AlunoDAO alunoDAO = DAOFactory.getAlunoDAO();
+		Aluno criador = alunoDAO.buscaPorId(idDoAluno);
+		alunoDAO.close();
+		return criador;
 	}
 	
 	@DELETE
