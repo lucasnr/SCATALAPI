@@ -19,4 +19,8 @@ public class DisciplinaHibernateDAO extends AbstractHibernateDAO<Disciplina> imp
 		return super.buscarPorId(id);
 	}
 
+	@Override
+	public Disciplina buscaPorNomeUsual(String nomeUsual) {
+		return super.buscaPorCampoUnico("nomeUsual", nomeUsual);
+	}
 }

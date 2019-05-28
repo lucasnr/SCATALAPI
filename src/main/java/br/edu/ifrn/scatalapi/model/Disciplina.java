@@ -29,6 +29,8 @@ public class Disciplina implements Serializable {
 	private String nome;
 	@Column(name = "DESCRICAO", columnDefinition = "TEXT")
 	private String descricao;
+	@Column(name = "NOME_USUAL")
+	private String nomeUsual;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CURSO_ID")
@@ -66,6 +68,10 @@ public class Disciplina implements Serializable {
 
 	public Tutoria getTutoria() {
 		return tutoria;
+	}
+
+	public String getNomeUsual() {
+		return nomeUsual;
 	}
 
 	@Override
@@ -107,7 +113,8 @@ public class Disciplina implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Disciplina [id=" + id + ", nome=" + nome + ", descricao=" + descricao + "]";
+		return "Disciplina [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", nomeUsual=" + nomeUsual
+				+ ", curso=" + curso + "]";
 	}
 
 }
