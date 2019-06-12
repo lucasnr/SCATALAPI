@@ -5,11 +5,13 @@ import br.edu.ifrn.suapi.exception.CredenciaisIncorretasException;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.exception.TokenInvalidoException;
 import br.edu.ifrn.suapi.model.UsuarioSUAP;
+import lombok.Getter;
 
 public class Token {
 
-	private final String conteudo;
-	private final boolean valido;
+	@Getter private final String conteudo;
+	@Getter private final boolean valido;
+	
 	private transient ClienteSUAP clienteSUAP;
 	
 	public Token(Credenciais aluno) {
@@ -49,14 +51,6 @@ public class Token {
 		this.valido = isValido;
 	}
 
-	public String getToken() {
-		return conteudo;
-	}
-	
-	public boolean isValido() {
-		return valido;
-	}
-	
 	public <T extends UsuarioSUAP> T getUsuario(Class<T> clazz) {
 		return this.clienteSUAP.getUsuario(clazz);
 	}

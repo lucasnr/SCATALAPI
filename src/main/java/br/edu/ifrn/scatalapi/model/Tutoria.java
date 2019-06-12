@@ -17,6 +17,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@ToString
+@EqualsAndHashCode
+
 @Entity
 @Table(name = "TUTORIA")
 public class Tutoria implements Serializable {
@@ -25,6 +34,7 @@ public class Tutoria implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -37,7 +47,7 @@ public class Tutoria implements Serializable {
 
 	@OneToOne
 	@JoinColumn(name = "DISCIPLINA_ID")
-	private Disciplina disciplina;
+	@Setter private Disciplina disciplina;
 
 	@OneToMany(mappedBy = "tutoria", fetch = FetchType.LAZY)
 	@OrderBy("registro desc")
@@ -59,63 +69,6 @@ public class Tutoria implements Serializable {
 		if (aluno != null && aluno.getId() != null && ! this.tutores.contains(aluno)) {			
 			this.tutores.add(aluno);
 		}
-	}
-	
-	public void setDisciplina(Disciplina disciplina) {
-		this.disciplina = disciplina;
-	}
-
-	public List<Postagem> getPostagens() {
-		return postagens;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public List<Aluno> getTutores() {
-		return tutores;
-	}
-
-	public Disciplina getDisciplina() {
-		return disciplina;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((tutores == null) ? 0 : tutores.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((disciplina == null) ? 0 : disciplina.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Tutoria other = (Tutoria) obj;
-		if (tutores == null) {
-			if (other.tutores != null)
-				return false;
-		} else if (!tutores.equals(other.tutores))
-			return false;
-		if (disciplina == null) {
-			if (other.disciplina != null)
-				return false;
-		} else if (!disciplina.equals(other.disciplina))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Tutoria [id=" + id + ", disciplina=" + disciplina + "]";
 	}
 
 }

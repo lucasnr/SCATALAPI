@@ -1,7 +1,9 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
 import br.edu.ifrn.scatalapi.model.Aluno;
+import lombok.Data;
 
+@Data
 public class AlunoDTO {
 
 	private String nome;
@@ -14,38 +16,6 @@ public class AlunoDTO {
 		this.nomeUsual = aluno.getNomeUsual();
 		this.matricula = aluno.getMatricula();
 		this.urlFoto = aluno.getUrlFoto();
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getMatricula() {
-		return matricula;
-	}
-
-	public void setMatricula(String matricula) {
-		this.matricula = matricula;
-	}
-
-	public String getNomeUsual() {
-		return nomeUsual;
-	}
-
-	public void setNomeUsual(String nomeUsual) {
-		this.nomeUsual = nomeUsual;
-	}
-
-	public String getUrlFoto() {
-		return urlFoto;
-	}
-
-	public void setUrlFoto(String urlFoto) {
-		this.urlFoto = urlFoto;
 	}
 
 }
