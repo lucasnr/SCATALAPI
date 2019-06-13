@@ -1,10 +1,9 @@
-package br.edu.ifrn.scatalapi.service;
+package br.edu.ifrn.scatalapi.controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.dao.AlunoDAO;
 import br.edu.ifrn.scatalapi.dao.DAOFactory;
@@ -13,14 +12,11 @@ import br.edu.ifrn.scatalapi.model.Credenciais;
 import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
-@Path("/login")
-public class AutenticacaoService implements Service {
+@RestController
+public class LoginController {
 
-	@POST
-	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Token post(Credenciais credenciais) {
+	@PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Token post(@RequestBody Credenciais credenciais) {
 		Token token = new Token(credenciais);
 
 		if (token.isValido()) {
@@ -37,13 +33,13 @@ public class AutenticacaoService implements Service {
 		AlunoDAO dao = DAOFactory.getAlunoDAO();
 		Aluno aluno = dao.buscaPorMatricula(matricula);
 		boolean usuarioNaoExiste = aluno == null;
-		
+
 		boolean salvouUsuario = false;
 		if (usuarioNaoExiste) {
 			aluno = new Aluno(alunoSUAP);
 			salvouUsuario = dao.salvar(aluno);
 		}
-		
+
 		dao.close();
 		return salvouUsuario;
 	}

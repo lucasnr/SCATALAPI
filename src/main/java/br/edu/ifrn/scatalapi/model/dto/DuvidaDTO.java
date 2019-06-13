@@ -10,6 +10,7 @@ public class DuvidaDTO {
 	
 	private String descricao;
 	
+	// TODO: O Spring não reconhece quando consome
 	@SerializedName("aluno_id")
 	private Integer idDoAluno;
 

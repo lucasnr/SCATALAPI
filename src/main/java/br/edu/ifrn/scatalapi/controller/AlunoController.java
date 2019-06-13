@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package br.edu.ifrn.scatalapi.service;
+package br.edu.ifrn.scatalapi.controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.dao.AlunoDAO;
 import br.edu.ifrn.scatalapi.dao.DAOFactory;
@@ -33,13 +28,11 @@ import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.scatalapi.model.dto.AlunoDTO;
 
-@Path("/aluno")
-public class AlunoService implements Service {
+@RestController
+public class AlunoController {
 
-	@GET
-	@Path("/{matricula}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public AlunoDTO get(@HeaderParam(value = "token") String tokenConteudo, @PathParam("matricula") String matricula) {
+	@GetMapping(value = "/aluno/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public AlunoDTO get(@RequestHeader("token") String tokenConteudo, @PathVariable String matricula) {
 		Token tokenObject = new Token(tokenConteudo);
 		if (!tokenObject.isValido()) {
 			return null;
@@ -51,25 +44,4 @@ public class AlunoService implements Service {
 		return new AlunoDTO(aluno);
 	}
 
-	@POST
-	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void post() {
-		// TODO: Implementation for HTTP POST request
-		System.out.println("POST invoked");
-	}
-
-	@PUT
-	@Path("/")
-	public void put() {
-		// TODO: Implementation for HTTP PUT request
-		System.out.println("PUT invoked");
-	}
-
-	@DELETE
-	@Path("/")
-	public void delete() {
-		// TODO: Implementation for HTTP DELETE request
-		System.out.println("DELETE invoked");
-	}
 }

@@ -1,10 +1,8 @@
 package br.edu.ifrn.scatalapi.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-@AllArgsConstructor
+@Data
 public class Credenciais{
 	
 	private String matricula;

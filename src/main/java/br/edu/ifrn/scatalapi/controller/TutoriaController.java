@@ -1,12 +1,10 @@
-package br.edu.ifrn.scatalapi.service;
+package br.edu.ifrn.scatalapi.controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.dao.AlunoDAO;
 import br.edu.ifrn.scatalapi.dao.DAOFactory;
@@ -17,19 +15,18 @@ import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaDTO;
 
-@Path("/tutoria")
-public class TutoriaService implements Service {
+@RestController
+public class TutoriaController {
 
-	@POST
-	@Path("/{disciplina}/duvida/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response postarNovaDuvida(DuvidaDTO duvida, @PathParam("disciplina") String nomeUsualDaDisciplina) {
+	@PostMapping(value = "/tutoria/{disciplina}/duvida", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String postarNovaDuvida(@PathVariable String disciplina, @RequestBody DuvidaDTO duvida) {
+		System.out.println(duvida);
 		Aluno aluno = pegaAlunoDaDuvida(duvida);
-		Tutoria tutoria = pegaTutoriaDaDuvida(nomeUsualDaDisciplina);
+		Tutoria tutoria = pegaTutoriaDaDuvida(disciplina);
 		Postagem postagem = criaPostagem(duvida, aluno, tutoria);
-		
+
 		boolean salvou = salvaPostagem(postagem);
-		return salvou ? Response.ok("Sucesso").build() : Response.serverError().build();
+		return salvou ? "200" : "500";
 	}
 
 	private boolean salvaPostagem(Postagem postagem) {
@@ -42,11 +39,11 @@ public class TutoriaService implements Service {
 	private Postagem criaPostagem(DuvidaDTO duvida, Aluno criador, Tutoria tutoria) {
 		String descricao = duvida.getDescricao();
 		String titulo = duvida.getTitulo();
-		
+
 		Postagem postagem = new Postagem(titulo, descricao);
 		postagem.setCriador(criador);
 		postagem.setTutoria(tutoria);
-		
+
 		return postagem;
 	}
 
@@ -65,12 +62,11 @@ public class TutoriaService implements Service {
 		alunoDAO.close();
 		return criador;
 	}
-	
-	@DELETE
-	@Path("/{disciplina}/duvida/{id}")
-	public Response removeDuvida(@PathParam("nome") String nomeDaDisciplina, @PathParam("id") Integer idDaDuvida) {
-		
-		
-		return null;
-	}
+
+//	@DELETE
+//	@Path("/{disciplina}/duvida/{id}")
+//	public Response removeDuvida(@PathParam("nome") String nomeDaDisciplina, @PathParam("id") Integer idDaDuvida) {
+//
+//		return null;
+//	}
 }
