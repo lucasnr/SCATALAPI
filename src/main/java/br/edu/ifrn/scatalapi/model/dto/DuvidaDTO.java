@@ -1,5 +1,6 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
@@ -10,8 +11,8 @@ public class DuvidaDTO {
 	
 	private String descricao;
 	
-	// TODO: O Spring não reconhece quando consome
 	@SerializedName("aluno_id")
+	@JsonProperty("aluno_id")
 	private Integer idDoAluno;
 
 }
