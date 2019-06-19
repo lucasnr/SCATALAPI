@@ -1,9 +1,14 @@
 package br.edu.ifrn.scatalapi.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.dao.AlunoDAO;
@@ -16,17 +21,18 @@ import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaDTO;
 
 @RestController
+@RequestMapping("/tutoria")
 public class TutoriaController {
 
-	@PostMapping(value = "/tutoria/{disciplina}/duvida", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String postarNovaDuvida(@PathVariable String disciplina, @RequestBody DuvidaDTO duvida) {
+	@PostMapping(value = "/{disciplina}/duvida", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> postarNovaDuvida(@PathVariable String disciplina, @RequestBody DuvidaDTO duvida) throws URISyntaxException {
 		System.out.println(duvida);
 		Aluno aluno = pegaAlunoDaDuvida(duvida);
 		Tutoria tutoria = pegaTutoriaDaDuvida(disciplina);
 		Postagem postagem = criaPostagem(duvida, aluno, tutoria);
 
 		boolean salvou = salvaPostagem(postagem);
-		return salvou ? "200" : "500";
+		return salvou ? ResponseEntity.created(new URI("localhost:8080/duvida/" + postagem.getId())).build() : ResponseEntity.status(500).build();
 	}
 
 	private boolean salvaPostagem(Postagem postagem) {

@@ -3,6 +3,7 @@ package br.edu.ifrn.scatalapi.controller;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.dao.AlunoDAO;
@@ -13,9 +14,10 @@ import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
 @RestController
+@RequestMapping("/login")
 public class LoginController {
 
-	@PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Token post(@RequestBody Credenciais credenciais) {
 		Token token = new Token(credenciais);
 
