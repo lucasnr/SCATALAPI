@@ -23,7 +23,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@ToString
+@ToString(exclude= {"tutores", "disciplina", "postagens"})
 @EqualsAndHashCode
 
 @Entity

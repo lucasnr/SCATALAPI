@@ -19,10 +19,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
+@Getter
+@ToString(exclude= {"disciplinas"})
+@EqualsAndHashCode
 
 @Entity
 @Table(name = "CURSO")

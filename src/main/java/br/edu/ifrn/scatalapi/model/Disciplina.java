@@ -18,9 +18,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter
 @NoArgsConstructor
-@ToString
+@Getter
+@ToString(exclude= {"curso"})
 @EqualsAndHashCode
 
 @Entity

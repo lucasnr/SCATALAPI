@@ -30,9 +30,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @NoArgsConstructor
-@ToString
+@Getter
+@ToString(exclude= {"curso", "emails", "postagens", "clienteSUAP"})
 @EqualsAndHashCode
 
 @Entity
@@ -75,7 +75,7 @@ public class Aluno implements Serializable {
 	private List<Postagem> postagens = new ArrayList<>();
 
 	@Transient
-	private ClienteSUAP clienteSUAP;
+	private transient ClienteSUAP clienteSUAP;
 
 	@PrePersist
 	private void prePersist() {

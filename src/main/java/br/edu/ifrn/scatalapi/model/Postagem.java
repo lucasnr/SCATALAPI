@@ -25,9 +25,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 
-@Getter
 @NoArgsConstructor
-@ToString
+@Getter
+@ToString(exclude= {"criador", "tutoria", "respostas", "postagemPai"})
 @EqualsAndHashCode
 
 @Entity

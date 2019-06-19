@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
 @NoArgsConstructor
-@ToString
+@Getter
+@ToString(exclude= {"aluno"})
 @EqualsAndHashCode
 
 @Entity
