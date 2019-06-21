@@ -14,9 +14,9 @@ public class Token {
 	
 	private transient ClienteSUAP clienteSUAP;
 	
-	public Token(Credenciais aluno) {
-		String matricula = aluno.getMatricula();
-		String senha = aluno.getSenha();
+	public Token(Credenciais credenciais) {
+		String matricula = credenciais.getMatricula();
+		String senha = credenciais.getSenha();
 		
 		String conteudo = null;
 		boolean isValido = false;
