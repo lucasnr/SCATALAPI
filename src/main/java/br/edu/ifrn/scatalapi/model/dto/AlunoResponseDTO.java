@@ -1,5 +1,7 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +9,7 @@ import br.edu.ifrn.scatalapi.model.Aluno;
 import lombok.Data;
 
 @Data
-public class AlunoDTO {
+public class AlunoResponseDTO {
 
 	private String nome;
 	
@@ -19,11 +21,17 @@ public class AlunoDTO {
 	@JsonProperty("url_foto")
 	private String urlFoto;
 
-	public AlunoDTO(Aluno aluno) {
+	private String email;
+
+	private String curso;
+
+	public AlunoResponseDTO(Aluno aluno) {
 		this.nome = aluno.getNome();
 		this.nomeUsual = aluno.getNomeUsual();
 		this.matricula = aluno.getMatricula();
 		this.urlFoto = aluno.getUrlFoto();
+		this.email = new ArrayList<>(aluno.getEmails()).get(0).getEndereco();
+		this.curso = aluno.getCurso().getNome();
 	}
 
 }

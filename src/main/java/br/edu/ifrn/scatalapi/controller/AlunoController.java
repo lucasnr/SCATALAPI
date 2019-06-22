@@ -1,5 +1,8 @@
 package br.edu.ifrn.scatalapi.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifrn.scatalapi.exception.NaoAutorizadoTokenInvalidoException;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Token;
-import br.edu.ifrn.scatalapi.model.dto.AlunoDTO;
+import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 
 @RestController
@@ -20,9 +23,17 @@ public class AlunoController {
 	
 	@Autowired
 	private AlunoRepository repository;
+	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AlunoResponseDTO> get() {
+		List<Aluno> all = repository.findAll();
+		List<AlunoResponseDTO> alunos = all.stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
+		return alunos;
+	}
+	
 
 	@GetMapping(value = "/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public AlunoDTO get(@RequestHeader("token") String headerToken, @PathVariable String matricula) {
+	public AlunoResponseDTO get(@RequestHeader("token") String headerToken, @PathVariable String matricula) {
 		
 		Token token = new Token(headerToken);
 		if (!token.isValido()) {
@@ -30,6 +41,6 @@ public class AlunoController {
 		}
 
 		Aluno aluno = repository.findByMatricula(matricula);
-		return new AlunoDTO(aluno);
+		return new AlunoResponseDTO(aluno);
 	}
 }

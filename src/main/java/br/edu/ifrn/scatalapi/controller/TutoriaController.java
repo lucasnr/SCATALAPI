@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Tutoria;
-import br.edu.ifrn.scatalapi.model.dto.AlunoDTO;
+import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 
 @RestController
@@ -23,13 +23,13 @@ public class TutoriaController {
 	private TutoriaRepository repository;
 	
 	@GetMapping(value="/{disciplina}/tutores", produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<AlunoDTO> get(@PathVariable String disciplina) {
+	public List<AlunoResponseDTO> get(@PathVariable String disciplina) {
 		Tutoria tutoria = repository.findByDisciplinaNomeUsual(disciplina);
 		List<Aluno> alunos = tutoria.getTutores();
 		
-		List<AlunoDTO> tutores = new ArrayList<>();
+		List<AlunoResponseDTO> tutores = new ArrayList<>();
 		for (Aluno aluno : alunos) {
-			AlunoDTO tutor = new AlunoDTO(aluno);
+			AlunoResponseDTO tutor = new AlunoResponseDTO(aluno);
 			tutores.add(tutor);
 		}
 		return tutores;
