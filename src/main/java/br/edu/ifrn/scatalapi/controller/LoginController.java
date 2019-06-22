@@ -1,16 +1,16 @@
 package br.edu.ifrn.scatalapi.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifrn.scatalapi.dao.AlunoDAO;
-import br.edu.ifrn.scatalapi.dao.DAOFactory;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Credenciais;
 import br.edu.ifrn.scatalapi.model.Token;
+import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
 @RestController
@@ -31,18 +31,19 @@ public class LoginController {
 		return token;
 	}
 
+	@Autowired
+	private AlunoRepository alunoRepository;
+	
 	private boolean salvaAlunoCasoNaoExista(AlunoSUAP alunoSUAP, String matricula) {
-		AlunoDAO dao = DAOFactory.getAlunoDAO();
-		Aluno aluno = dao.buscaPorMatricula(matricula);
+		Aluno aluno = alunoRepository.findByMatricula(matricula);
 		boolean usuarioNaoExiste = aluno == null;
 
 		boolean salvouUsuario = false;
 		if (usuarioNaoExiste) {
 			aluno = new Aluno(alunoSUAP);
-			salvouUsuario = dao.salvar(aluno);
+			salvouUsuario = alunoRepository.save(aluno) != null;
 		}
 
-		dao.close();
 		return salvouUsuario;
 	}
 }
