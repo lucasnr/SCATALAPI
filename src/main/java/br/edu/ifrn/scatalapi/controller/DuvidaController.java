@@ -31,42 +31,42 @@ public class DuvidaController {
 
 	@Autowired
 	private PostagemRepository repository;
-	
-	@GetMapping(value="/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+
+	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public DuvidaResponseDTO get(@PathVariable Integer id, @PathVariable String disciplina) {
 		Postagem postagem = repository.findById(id).get();
 		boolean isDaTutoria = postagem.getTutoria().getDisciplina().getNomeUsual().equalsIgnoreCase(disciplina);
-		if(! isDaTutoria) 
+		if (!isDaTutoria)
 			throw new DuvidaNaoEncontradaParaTutoria();
-		
+
 		DuvidaResponseDTO duvida = new DuvidaResponseDTO(postagem);
 		return duvida;
 	}
-	
+
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<DuvidaResponseDTO> postarNovaDuvida(@PathVariable String disciplina, @RequestBody DuvidaRequestDTO duvida, UriComponentsBuilder uriBuilder) {
-		Aluno aluno = pegaAlunoDaDuvida(duvida);
-		Tutoria tutoria = pegaTutoriaDaDuvida(disciplina);
-		Postagem postagem = criaPostagem(duvida, aluno, tutoria);
+	public ResponseEntity<DuvidaResponseDTO> postarNovaDuvida(@PathVariable String disciplina,
+			@RequestBody DuvidaRequestDTO duvida, UriComponentsBuilder uriBuilder) {
+		Aluno aluno = getAlunoIfExists(duvida);
+		// if(aluno == null)
+		// throw exception
+		Tutoria tutoria = getTutoriaDaDuvida(disciplina);
+		Postagem postagem = createPostagem(duvida, aluno, tutoria);
 
 		ResponseEntity<DuvidaResponseDTO> resposta;
-		boolean salvou = salvaPostagem(postagem);
+		boolean salvou = repository.save(postagem) != null;
 		if (salvou) {
-			DuvidaResponseDTO duvidaDTO = new DuvidaResponseDTO(postagem, aluno);
-			URI location = uriBuilder.path("/tutoria/{disciplina}/duvida/{id}").buildAndExpand(disciplina, duvidaDTO.getId()).toUri();
+			DuvidaResponseDTO duvidaDTO = new DuvidaResponseDTO(postagem);
+			URI location = uriBuilder.path("/tutoria/{disciplina}/duvida/{id}")
+					.buildAndExpand(disciplina, duvidaDTO.getId()).toUri();
 			resposta = ResponseEntity.created(location).body(duvidaDTO);
-		} else 
+		} else
 			resposta = ResponseEntity.status(500).build();
-		
+
 		return resposta;
 	}
 
-	private boolean salvaPostagem(Postagem postagem) {
-		return repository.save(postagem) != null;
-	}
-
-	private Postagem criaPostagem(DuvidaRequestDTO duvida, Aluno criador, Tutoria tutoria) {
+	private Postagem createPostagem(DuvidaRequestDTO duvida, Aluno criador, Tutoria tutoria) {
 		String descricao = duvida.getDescricao();
 		String titulo = duvida.getTitulo();
 
@@ -77,23 +77,21 @@ public class DuvidaController {
 		return postagem;
 	}
 
-
 	@Autowired
 	private TutoriaRepository tutoriaRepository;
-	
-	private Tutoria pegaTutoriaDaDuvida(String nomeUsualDaDisciplina) {
+
+	private Tutoria getTutoriaDaDuvida(String nomeUsualDaDisciplina) {
 		Tutoria tutoria = tutoriaRepository.findByDisciplinaNomeUsual(nomeUsualDaDisciplina);
 		return tutoria;
 	}
 
-
 	@Autowired
 	private AlunoRepository alunoRepository;
-	
-	private Aluno pegaAlunoDaDuvida(DuvidaRequestDTO duvida) {
-		Integer idDoAluno = duvida.getIdDoAluno();
 
-		Aluno criador = alunoRepository.findById(idDoAluno).get();
-		return criador;
+	private Aluno getAlunoIfExists(DuvidaRequestDTO duvida) {
+		Integer id = duvida.getIdDoAluno();
+
+		boolean existe = alunoRepository.existsById(id);
+		return existe ? new Aluno(id) : null;
 	}
 }

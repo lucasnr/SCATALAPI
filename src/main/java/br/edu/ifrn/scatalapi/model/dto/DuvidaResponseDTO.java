@@ -2,7 +2,9 @@ package br.edu.ifrn.scatalapi.model.dto;
 
 import java.util.Date;
 
-import br.edu.ifrn.scatalapi.model.Aluno;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
+
 import br.edu.ifrn.scatalapi.model.Postagem;
 import lombok.Data;
 
@@ -15,27 +17,17 @@ public class DuvidaResponseDTO {
 	
 	private String descricao;
 	
-	private String aluno;
-	
-	private String matricula;
-	
 	private Date registro;
+	
+	@SerializedName("aluno_id")
+	@JsonProperty("aluno_id")
+	private Integer idDoAluno;
 	
 	public DuvidaResponseDTO(Postagem postagem) {
 		this.id = postagem.getId();
 		this.titulo = postagem.getTitulo();
 		this.descricao = postagem.getDescricao();
-		this.aluno = postagem.getCriador().getNome();
-		this.matricula = postagem.getCriador().getMatricula();
 		this.registro = postagem.getRegistro();
-	}
-
-	public DuvidaResponseDTO(Postagem postagem, Aluno aluno) {
-		this.id = postagem.getId();
-		this.titulo = postagem.getTitulo();
-		this.descricao = postagem.getDescricao();
-		this.aluno = aluno.getNome();
-		this.matricula = aluno.getMatricula();
-		this.registro = postagem.getRegistro();
+		this.idDoAluno = postagem.getCriador().getId();
 	}
 }
