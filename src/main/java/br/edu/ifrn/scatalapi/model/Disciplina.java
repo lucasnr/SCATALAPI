@@ -20,8 +20,8 @@ import lombok.ToString;
 
 @NoArgsConstructor
 @Getter
-@ToString(exclude= {"curso"})
-@EqualsAndHashCode
+@ToString(exclude= {"curso", "tutoria"})
+@EqualsAndHashCode(exclude= {"curso", "tutoria"})
 
 @Entity
 @Table(name = "DISCIPLINA")
@@ -50,7 +50,7 @@ public class Disciplina implements Serializable {
 	@JoinColumn(name = "CURSO_ID")
 	private Curso curso;
 
-	@OneToOne(fetch = FetchType.EAGER, mappedBy = "disciplina")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "disciplina")
 	private Tutoria tutoria;
 
 	public Disciplina(String nome, String descricao, Curso curso) {

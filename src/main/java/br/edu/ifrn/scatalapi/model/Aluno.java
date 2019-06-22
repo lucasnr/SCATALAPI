@@ -33,7 +33,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString(exclude= {"curso", "emails", "postagens", "clienteSUAP"})
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude= {"curso", "emails", "postagens", "clienteSUAP"})
 
 @Entity
 @Table(name = "ALUNO")

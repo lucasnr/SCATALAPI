@@ -24,7 +24,7 @@ import lombok.ToString;
 
 @Getter
 @ToString(exclude= {"tutores", "disciplina", "postagens"})
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude= {"tutores", "disciplina", "postagens"})
 
 @Entity
 @Table(name = "TUTORIA")
