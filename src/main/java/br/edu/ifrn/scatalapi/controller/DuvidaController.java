@@ -1,7 +1,6 @@
 package br.edu.ifrn.scatalapi.controller;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.edu.ifrn.scatalapi.exception.DuvidaNaoEncontradaParaTutoria;
 import br.edu.ifrn.scatalapi.model.Aluno;
@@ -42,21 +42,18 @@ public class DuvidaController {
 	
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> postarNovaDuvida(@PathVariable String disciplina, @RequestBody DuvidaDTO duvida) throws URISyntaxException {
+	public ResponseEntity<DuvidaDTO> postarNovaDuvida(@PathVariable String disciplina, @RequestBody DuvidaDTO duvida, UriComponentsBuilder uriBuilder) {
 		Aluno aluno = pegaAlunoDaDuvida(duvida);
 		Tutoria tutoria = pegaTutoriaDaDuvida(disciplina);
 		Postagem postagem = criaPostagem(duvida, aluno, tutoria);
 
-		ResponseEntity<?> resposta;
+		ResponseEntity<DuvidaDTO> resposta;
 		boolean salvou = salvaPostagem(postagem);
-		if (salvou) {		
-			StringBuilder caminho = new StringBuilder();
-			caminho.append("localhost:8080/tutoria/");
-			caminho.append(disciplina);
-			caminho.append("/duvida/");
-			caminho.append(postagem.getId());
-			URI location = new URI(caminho.toString());
-			resposta = ResponseEntity.created(location).build();
+		if (salvou) {
+			Integer id = postagem.getId();
+			duvida.setId(id);
+			URI location = uriBuilder.path("/tutoria/{disciplina}/duvida/{id}").buildAndExpand(disciplina, id).toUri();
+			resposta = ResponseEntity.created(location).body(duvida);
 		} else 
 			resposta = ResponseEntity.status(500).build();
 		

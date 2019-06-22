@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class DuvidaDTO {
+	
+	private Integer id;
+	
 	private String titulo;
 	
 	private String descricao;
@@ -19,6 +22,7 @@ public class DuvidaDTO {
 	private Integer idDoAluno;
 
 	public DuvidaDTO(Postagem postagem) {
+		this.id = postagem.getId();
 		this.titulo = postagem.getTitulo();
 		this.descricao = postagem.getDescricao();
 		this.idDoAluno = postagem.getCriador().getId();
