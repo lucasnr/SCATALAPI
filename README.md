@@ -1,2 +1,2 @@
 # SCATALAPI
-API REST usando micro serviços 
+API REST usando Spring 
