@@ -49,7 +49,9 @@ public class TutoriaController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<TutoriaResponseDTO> findAll() {
-		List<TutoriaResponseDTO> tutorias = repository.findAll().stream().map(TutoriaResponseDTO::new).collect(Collectors.toList());
+		List<TutoriaResponseDTO> tutorias = repository.findAll().
+				stream().map(TutoriaResponseDTO::new).
+				collect(Collectors.toList());
 		return tutorias;
 	}
 
@@ -68,7 +70,8 @@ public class TutoriaController {
 		if (tutoria == null)
 			throw new RecursoNaoEncontradoException();
 
-		List<AlunoResponseDTO> tutores = tutoria.getTutores().stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
+		List<AlunoResponseDTO> tutores = tutoria.getTutores().
+				stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
 		return tutores;
 	}
 

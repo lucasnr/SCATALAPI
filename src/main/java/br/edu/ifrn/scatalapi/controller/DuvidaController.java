@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.edu.ifrn.scatalapi.exception.FalhaAoSalvarNoBancoDeDadosException;
 import br.edu.ifrn.scatalapi.exception.RecursoNaoEncontradoException;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Postagem;
@@ -54,23 +55,20 @@ public class DuvidaController {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<DuvidaResponseDTO> postDuvida(@RequestBody DuvidaRequestDTO duvida, UriComponentsBuilder uriBuilder) {
-		Aluno aluno = getAlunoIfExists(duvida);
+		Aluno aluno = findAlunoIfExists(duvida);
 		// if(aluno == null)
 		// throw exception
-		Tutoria tutoria = getTutoriaDaDuvida(duvida);
+		Tutoria tutoria = findTutoriaDaDuvida(duvida);
 		Postagem postagem = createPostagem(duvida, aluno, tutoria);
 
-		ResponseEntity<DuvidaResponseDTO> resposta;
 		boolean salvou = repository.save(postagem) != null;
 		if (salvou) {
 			DuvidaResponseDTO duvidaDTO = new DuvidaResponseDTO(postagem);
 			URI location = uriBuilder.path("/duvida/{id}")
 					.buildAndExpand(duvidaDTO.getId()).toUri();
-			resposta = ResponseEntity.created(location).body(duvidaDTO);
+			return ResponseEntity.created(location).body(duvidaDTO);
 		} else
-			resposta = ResponseEntity.status(500).build();
-
-		return resposta;
+			throw new FalhaAoSalvarNoBancoDeDadosException();
 	}
 	
 	@PutMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -104,19 +102,17 @@ public class DuvidaController {
 		Postagem postagem = new Postagem(titulo, descricao);
 		postagem.setCriador(criador);
 		postagem.setTutoria(tutoria);
-
 		return postagem;
 	}
 
-	private Tutoria getTutoriaDaDuvida(DuvidaRequestDTO duvida) {
+	private Tutoria findTutoriaDaDuvida(DuvidaRequestDTO duvida) {
 		String nomeUsualDaDisciplina = duvida.getDisciplinaUsual();
 		Tutoria tutoria = tutoriaRepository.findByDisciplinaNomeUsual(nomeUsualDaDisciplina);
 		return tutoria;
 	}
 
-	private Aluno getAlunoIfExists(DuvidaRequestDTO duvida) {
+	private Aluno findAlunoIfExists(DuvidaRequestDTO duvida) {
 		Integer id = duvida.getIdDoAluno();
-
 		boolean existe = alunoRepository.existsById(id);
 		return existe ? new Aluno(id) : null;
 	}

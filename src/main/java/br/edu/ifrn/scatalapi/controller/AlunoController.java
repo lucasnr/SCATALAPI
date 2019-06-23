@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.exception.RecursoNaoEncontradoException;
 import br.edu.ifrn.scatalapi.model.Aluno;
-import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.MatriculaDTO;
@@ -39,8 +38,7 @@ public class AlunoController {
 	public Page<AlunoResponseDTO> finddAll(@RequestParam Integer offset, @RequestParam Integer number) {
 		Pageable paginacao = PageRequest.of(offset, number);
 //		Pageable paginacao = PageRequest.of(offset, number, Direction.DESC, "registro");
-		Page<Aluno> page = repository.findAll(paginacao);
-		return page.map(AlunoResponseDTO::new);
+		return repository.findAll(paginacao).map(AlunoResponseDTO::new);
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -68,7 +66,6 @@ public class AlunoController {
 			throw new RecursoNaoEncontradoException();
 		
 		Pageable paginacao = PageRequest.of(offset, number, Direction.DESC, "registro");
-		Page<Postagem> page = postagemRepository.findDuvidasByCriadorId(paginacao, id);
-		return page.map(DuvidaResponseDTO::new);
+		return postagemRepository.findDuvidasByCriadorId(paginacao, id).map(DuvidaResponseDTO::new);
 	}
 }

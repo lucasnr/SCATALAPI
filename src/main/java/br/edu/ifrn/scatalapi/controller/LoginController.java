@@ -32,7 +32,7 @@ public class LoginController {
 
 		TokenDTO token = new TokenDTO(credenciais);
 		if (token.isValido()) {
-			Aluno alunoCriado = saveAlunoCasoNaoExista(token.asAluno());
+			Aluno alunoCriado = saveAlunoIfNotExists(token.asAluno());
 			if(alunoCriado != null) {
 				URI location = uriBuilder.path("/aluno/{id}").buildAndExpand(alunoCriado.getId()).toUri();				
 				resposta = ResponseEntity.created(location).body(token);
@@ -44,7 +44,7 @@ public class LoginController {
 		return resposta;
 	}
 	
-	private Aluno saveAlunoCasoNaoExista(AlunoSUAP alunoSUAP) {
+	private Aluno saveAlunoIfNotExists(AlunoSUAP alunoSUAP) {
 		Optional<Aluno> optional = alunoRepository.findByMatricula(alunoSUAP.getMatricula());
 		if (optional.isPresent())
 			return null;
