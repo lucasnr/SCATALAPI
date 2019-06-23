@@ -1,7 +1,9 @@
 package br.edu.ifrn.scatalapi.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -26,6 +28,8 @@ import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaRequestDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaUpdateDTO;
+import br.edu.ifrn.scatalapi.model.dto.RespostaRequestDTO;
+import br.edu.ifrn.scatalapi.model.dto.RespostaResponseDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
@@ -45,17 +49,21 @@ public class DuvidaController {
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public DuvidaResponseDTO findById(@PathVariable Integer id) {
-		Optional<Postagem> optional = repository.findById(id);
-		if (! optional.isPresent())
-			throw new RecursoNaoEncontradoException();
-
-		return new DuvidaResponseDTO(optional.get());
+		Postagem postagem = getDuvidaOrThrowException(id);
+		return new DuvidaResponseDTO(postagem);
+	}
+	
+	@GetMapping(value = "/{id}/respostas", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<RespostaResponseDTO> findRespostasById(@PathVariable Integer id) {
+		Postagem postagem = getDuvidaOrThrowException(id);
+		return postagem.getRespostas().
+				stream().map(RespostaResponseDTO::new).collect(Collectors.toList());
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<DuvidaResponseDTO> postDuvida(@RequestBody DuvidaRequestDTO duvida, UriComponentsBuilder uriBuilder) {
-		Aluno aluno = findAlunoIfExists(duvida);
+		Aluno aluno = findAlunoIfExists(duvida.getIdDoAluno());
 		// if(aluno == null)
 		// throw exception
 		Tutoria tutoria = findTutoriaDaDuvida(duvida);
@@ -71,14 +79,31 @@ public class DuvidaController {
 			throw new FalhaAoSalvarNoBancoDeDadosException();
 	}
 	
+	@PostMapping(value = "/{id}/resposta", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
+	public ResponseEntity<RespostaResponseDTO> postResposta(@PathVariable Integer id, @RequestBody RespostaRequestDTO resposta,
+			UriComponentsBuilder uriBuilder){
+		Postagem duvida = getDuvidaOrThrowException(id);
+		Aluno criador = findAlunoIfExists(resposta.getIdDoAluno());
+		
+		Postagem postagem = new Postagem(null, resposta.getDescricao());
+		postagem.setCriador(criador);
+		postagem.setPostagemPai(duvida);
+		postagem.setTutoria(duvida.getTutoria());
+		Postagem salvo = repository.save(postagem);
+		
+		if (salvo == null)
+			throw new FalhaAoSalvarNoBancoDeDadosException();
+		
+		RespostaResponseDTO responseDTO = new RespostaResponseDTO(postagem);
+		URI location = uriBuilder.path("/resposta/{id}").buildAndExpand(responseDTO.getId()).toUri();
+		return ResponseEntity.created(location).body(responseDTO);
+	}
+	
 	@PutMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<DuvidaResponseDTO> updateDuvida(@RequestBody DuvidaUpdateDTO duvida, @PathVariable Integer id){
-		Optional<Postagem> optional = repository.findById(id);
-		if(! optional.isPresent())
-			throw new RecursoNaoEncontradoException();
-		
-		Postagem postagem = optional.get();
+		Postagem postagem = getDuvidaOrThrowException(id);
 		postagem.setTitulo(duvida.getTitulo());
 		postagem.setDescricao(duvida.getDescricao());
 		return ResponseEntity.ok(new DuvidaResponseDTO(postagem));
@@ -93,6 +118,14 @@ public class DuvidaController {
 		} catch (Exception e) {			
 			throw new RecursoNaoEncontradoException();
 		}
+	}
+	
+	private Postagem getDuvidaOrThrowException(Integer id) {
+		Optional<Postagem> optional = repository.findDuvidaById(id);
+		if(! optional.isPresent())
+			throw new RecursoNaoEncontradoException();
+		
+		return optional.get();
 	}
 	
 	private Postagem createPostagem(DuvidaRequestDTO duvida, Aluno criador, Tutoria tutoria) {
@@ -111,9 +144,8 @@ public class DuvidaController {
 		return tutoria;
 	}
 
-	private Aluno findAlunoIfExists(DuvidaRequestDTO duvida) {
-		Integer id = duvida.getIdDoAluno();
-		boolean existe = alunoRepository.existsById(id);
-		return existe ? new Aluno(id) : null;
+	private Aluno findAlunoIfExists(Integer idDoAluno) {
+		boolean existe = alunoRepository.existsById(idDoAluno);
+		return existe ? new Aluno(idDoAluno) : null;
 	}
 }
