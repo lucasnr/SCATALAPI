@@ -1,14 +1,15 @@
 package br.edu.ifrn.scatalapi.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.exception.NaoAutorizadoTokenInvalidoException;
@@ -25,12 +26,11 @@ public class AlunoController {
 	private AlunoRepository repository;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AlunoResponseDTO> finddAll() {
-		List<Aluno> all = repository.findAll();
-		List<AlunoResponseDTO> alunos = all.stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
-		return alunos;
+	public Page<AlunoResponseDTO> finddAll(@RequestParam Integer offset, @RequestParam Integer number) {
+		Pageable paginacao = PageRequest.of(offset, number);
+		Page<Aluno> page = repository.findAll(paginacao);
+		return page.map(AlunoResponseDTO::new);
 	}
-	
 
 	@GetMapping(value = "/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public AlunoResponseDTO findByMatricula(@RequestHeader("token") String headerToken, @PathVariable String matricula) {
