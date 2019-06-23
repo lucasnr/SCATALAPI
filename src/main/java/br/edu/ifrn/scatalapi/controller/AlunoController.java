@@ -4,15 +4,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
@@ -35,9 +34,7 @@ public class AlunoController {
 	private PostagemRepository postagemRepository;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<AlunoResponseDTO> finddAll(@RequestParam Integer offset, @RequestParam Integer number) {
-		Pageable paginacao = PageRequest.of(offset, number);
-//		Pageable paginacao = PageRequest.of(offset, number, Direction.DESC, "registro");
+	public Page<AlunoResponseDTO> finddAll(@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
 		return repository.findAll(paginacao).map(AlunoResponseDTO::new);
 	}
 
@@ -60,12 +57,10 @@ public class AlunoController {
 	}
 	
 	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findDuvidasById(@RequestParam Integer offset, @RequestParam Integer number, 
-			@PathVariable Integer id){
+	public Page<DuvidaResponseDTO> findDuvidasById(@PathVariable Integer id, @PageableDefault(page=0, size=5, sort="registro", direction=Direction.DESC) Pageable paginacao){
 		if (! repository.findById(id).isPresent())
 			throw new RecursoNaoEncontradoException();
 		
-		Pageable paginacao = PageRequest.of(offset, number, Direction.DESC, "registro");
 		return postagemRepository.findDuvidasByCriadorId(paginacao, id).map(DuvidaResponseDTO::new);
 	}
 }

@@ -8,8 +8,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.exception.RecursoNaoEncontradoException;
 import br.edu.ifrn.scatalapi.model.Aluno;
-import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
@@ -57,11 +56,11 @@ public class TutoriaController {
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public TutoriaDetalhadaResponseDTO findById(@PathVariable Integer id) {
-		Optional<Tutoria> optional = repository.findById(id);
-		if (!optional.isPresent())
+		Optional<Tutoria> tutoria = repository.findById(id);
+		if (!tutoria.isPresent())
 			throw new RecursoNaoEncontradoException();
 
-		return new TutoriaDetalhadaResponseDTO(optional.get());
+		return new TutoriaDetalhadaResponseDTO(tutoria.get());
 	}
 
 	@GetMapping(value = "/{disciplina}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,15 +76,13 @@ public class TutoriaController {
 
 	@GetMapping(value = "/{disciplina}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<DuvidaResponseDTO> findDuvidasByDisciplina(@PathVariable String disciplina,
-			@RequestParam Integer offset, @RequestParam Integer number) {
-		Pageable paginacao = PageRequest.of(offset, number);
-		Page<Postagem> duvidas = postagemRepository.findDuvidasByDisciplina(paginacao, disciplina);
-		return duvidas.map(DuvidaResponseDTO::new);
+			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
+		return postagemRepository.findDuvidasByDisciplina(paginacao, disciplina).map(DuvidaResponseDTO::new);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<TutoriaDetalhadaResponseDTO> updateTutores(@RequestBody TutoriaUpdateDTO tutoriaDTO,
+	public ResponseEntity<TutoriaDetalhadaResponseDTO> updateTutoresById(@RequestBody TutoriaUpdateDTO tutoriaDTO,
 			@PathVariable Integer id) {
 		Optional<Tutoria> optional = repository.findById(id);
 		if (!optional.isPresent())
