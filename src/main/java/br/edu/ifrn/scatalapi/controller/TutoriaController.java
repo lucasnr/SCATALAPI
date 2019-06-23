@@ -63,21 +63,21 @@ public class TutoriaController {
 		return new TutoriaDetalhadaResponseDTO(tutoria.get());
 	}
 
-	@GetMapping(value = "/{disciplina}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AlunoResponseDTO> findTutoresByDisciplina(@PathVariable String disciplina) {
-		Tutoria tutoria = repository.findByDisciplinaNomeUsual(disciplina);
-		if (tutoria == null)
+	@GetMapping(value = "/{id}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AlunoResponseDTO> findTutoresByDisciplina(@PathVariable Integer id) {
+		Optional<Tutoria> tutoria = repository.findById(id);
+		if (! tutoria.isPresent())
 			throw new RecursoNaoEncontradoException();
 
-		List<AlunoResponseDTO> tutores = tutoria.getTutores().
+		List<AlunoResponseDTO> tutores = tutoria.get().getTutores().
 				stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
 		return tutores;
 	}
 
-	@GetMapping(value = "/{disciplina}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findDuvidasByDisciplina(@PathVariable String disciplina,
+	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<DuvidaResponseDTO> findDuvidasByDisciplina(@PathVariable Integer id,
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
-		return postagemRepository.findDuvidasByDisciplina(paginacao, disciplina).map(DuvidaResponseDTO::new);
+		return postagemRepository.findDuvidasByTutoriaId(paginacao, id).map(DuvidaResponseDTO::new);
 	}
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
