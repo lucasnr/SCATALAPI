@@ -23,6 +23,10 @@ public class DuvidaRequestDTO {
 	@NotNull @NotEmpty @Length(min=40)
 	private String descricao;
 	
+	@SerializedName("disciplina")
+	@JsonProperty("disciplina")
+	private String disciplinaUsual;
+	
 	@NotNull @Pattern(regexp="\\d*") 
 	@SerializedName("aluno_id")
 	@JsonProperty("aluno_id")
@@ -32,5 +36,6 @@ public class DuvidaRequestDTO {
 		this.titulo = postagem.getTitulo();
 		this.descricao = postagem.getDescricao();
 		this.idDoAluno = postagem.getCriador().getId();
+		this.disciplinaUsual = postagem.getTutoria().getDisciplina().getNomeUsual();
 	}
 }

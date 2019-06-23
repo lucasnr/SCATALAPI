@@ -3,8 +3,8 @@ package br.edu.ifrn.scatalapi.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Essa dúvida não existe nessa tutoria")
-public class DuvidaNaoEncontradaParaTutoria extends RuntimeException{
+@ResponseStatus(code=HttpStatus.NOT_FOUND, reason="Recurso não encontrado")
+public class RecursoNaoEncontradoException extends RuntimeException {
 
 	/**
 	 * 

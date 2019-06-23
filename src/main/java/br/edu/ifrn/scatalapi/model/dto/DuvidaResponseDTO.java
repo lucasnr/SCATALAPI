@@ -19,6 +19,10 @@ public class DuvidaResponseDTO {
 	
 	private Date registro;
 	
+	@SerializedName("disciplina")
+	@JsonProperty("disciplina")
+	private String disciplinaUsual;
+	
 	@SerializedName("aluno_id")
 	@JsonProperty("aluno_id")
 	private Integer idDoAluno;
@@ -29,5 +33,6 @@ public class DuvidaResponseDTO {
 		this.descricao = postagem.getDescricao();
 		this.registro = postagem.getRegistro();
 		this.idDoAluno = postagem.getCriador().getId();
+		this.disciplinaUsual = postagem.getTutoria().getDisciplina().getNomeUsual();
 	}
 }
