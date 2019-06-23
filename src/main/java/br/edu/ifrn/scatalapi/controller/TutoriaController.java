@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,17 +18,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.exception.RecursoNaoEncontradoException;
 import br.edu.ifrn.scatalapi.model.Aluno;
+import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
+import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.TutorUpdateDTO;
 import br.edu.ifrn.scatalapi.model.dto.TutoriaDetalhadaResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.TutoriaResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.TutoriaUpdateDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
+import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 
 @RestController
@@ -58,6 +65,17 @@ public class TutoriaController {
 		
 		List<AlunoResponseDTO> tutores = tutoria.getTutores().stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
 		return tutores;
+	}
+
+	@Autowired
+	private PostagemRepository postagemRepository;
+	
+	@GetMapping(value="/{disciplina}/duvidas", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Page<DuvidaResponseDTO> findDuvidasByDisciplina(@PathVariable String disciplina, 
+			@RequestParam Integer offset, @RequestParam Integer number){
+		Pageable paginacao = PageRequest.of(offset, number);
+		Page<Postagem> duvidas = postagemRepository.findDuvidasByDisciplina(paginacao, disciplina);
+		return duvidas.map(DuvidaResponseDTO::new);
 	}
 
 	@Autowired

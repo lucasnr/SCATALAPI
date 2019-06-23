@@ -42,8 +42,7 @@ public class DuvidaController {
 		if (! optional.isPresent())
 			throw new RecursoNaoEncontradoException();
 
-		Postagem postagem = optional.get();
-		return new DuvidaResponseDTO(postagem);
+		return new DuvidaResponseDTO(optional.get());
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

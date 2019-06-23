@@ -28,6 +28,7 @@ public class AlunoController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public Page<AlunoResponseDTO> finddAll(@RequestParam Integer offset, @RequestParam Integer number) {
 		Pageable paginacao = PageRequest.of(offset, number);
+//		Pageable paginacao = PageRequest.of(offset, number, Direction.DESC, "registro");
 		Page<Aluno> page = repository.findAll(paginacao);
 		return page.map(AlunoResponseDTO::new);
 	}
