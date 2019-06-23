@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class AlunoResponseDTO {
 
+	private Integer id;
+	
 	private String nome;
 	
 	private String matricula;
@@ -26,6 +28,7 @@ public class AlunoResponseDTO {
 	private String curso;
 
 	public AlunoResponseDTO(Aluno aluno) {
+		this.id = aluno.getId();
 		this.nome = aluno.getNome();
 		this.nomeUsual = aluno.getNomeUsual();
 		this.matricula = aluno.getMatricula();

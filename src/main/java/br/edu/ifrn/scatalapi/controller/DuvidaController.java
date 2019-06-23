@@ -36,6 +36,12 @@ public class DuvidaController {
 	@Autowired
 	private PostagemRepository repository;
 
+	@Autowired
+	private AlunoRepository alunoRepository;
+
+	@Autowired
+	private TutoriaRepository tutoriaRepository;
+
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public DuvidaResponseDTO findById(@PathVariable Integer id) {
 		Optional<Postagem> optional = repository.findById(id);
@@ -102,17 +108,11 @@ public class DuvidaController {
 		return postagem;
 	}
 
-	@Autowired
-	private TutoriaRepository tutoriaRepository;
-
 	private Tutoria getTutoriaDaDuvida(DuvidaRequestDTO duvida) {
 		String nomeUsualDaDisciplina = duvida.getDisciplinaUsual();
 		Tutoria tutoria = tutoriaRepository.findByDisciplinaNomeUsual(nomeUsualDaDisciplina);
 		return tutoria;
 	}
-
-	@Autowired
-	private AlunoRepository alunoRepository;
 
 	private Aluno getAlunoIfExists(DuvidaRequestDTO duvida) {
 		Integer id = duvida.getIdDoAluno();

@@ -10,7 +10,10 @@ import br.edu.ifrn.scatalapi.model.Postagem;
 
 public interface PostagemRepository extends JpaRepository<Postagem, Integer>{
 
-	@Query("SELECT p FROM Postagem p WHERE postagemPai IS NULL AND p.tutoria.disciplina.nomeUsual = :nomeUsual")
+	@Query("SELECT p FROM Postagem p WHERE p.postagemPai IS NULL AND p.tutoria.disciplina.nomeUsual = :nomeUsual")
 	public Page<Postagem> findDuvidasByDisciplina(Pageable paginacao, @Param("nomeUsual") String disciplinaUsual);
+
+	@Query("SELECT p FROM Postagem p WHERE p.postagemPai IS NULL AND p.criador.id = :id")
+	public Page<Postagem> findDuvidasByCriadorId(Pageable paginacao, @Param("id") Integer id);
 
 }

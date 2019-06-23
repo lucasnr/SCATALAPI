@@ -1,20 +1,20 @@
-package br.edu.ifrn.scatalapi.model;
+package br.edu.ifrn.scatalapi.model.dto;
 
 import br.edu.ifrn.suapi.ClienteSUAP;
 import br.edu.ifrn.suapi.exception.CredenciaisIncorretasException;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.exception.TokenInvalidoException;
-import br.edu.ifrn.suapi.model.UsuarioSUAP;
+import br.edu.ifrn.suapi.model.AlunoSUAP;
 import lombok.Getter;
 
-public class Token {
+public class TokenDTO {
 
 	@Getter private final String conteudo;
 	@Getter private final boolean valido;
 	
 	private transient ClienteSUAP clienteSUAP;
 	
-	public Token(Credenciais credenciais) {
+	public TokenDTO(CredenciaisDTO credenciais) throws FalhaAoConectarComSUAPException {
 		String matricula = credenciais.getMatricula();
 		String senha = credenciais.getSenha();
 		
@@ -26,24 +26,30 @@ public class Token {
 			conteudo = cliente.getTOKEN();
 			isValido = true;
 			this.clienteSUAP = cliente;
-		} catch (FalhaAoConectarComSUAPException | CredenciaisIncorretasException e) {
+		} catch (CredenciaisIncorretasException e) {
 			conteudo = e.getMessage();
+		} catch (FalhaAoConectarComSUAPException e) {
+			conteudo = e.getMessage();
+			throw e;
 		}
 		
 		this.valido = isValido;
 		this.conteudo = conteudo;
 	}
 	
-	public Token(String token) {
+	public TokenDTO(String token) throws FalhaAoConectarComSUAPException {
 		String conteudo = token;
-		boolean isValido = true;
+		boolean isValido = false;
 		
 		ClienteSUAP clienteSUAP = null;
 		try {
 			clienteSUAP = new ClienteSUAP(token);
-		} catch (TokenInvalidoException | FalhaAoConectarComSUAPException e) {
+			isValido = true;
+		} catch (TokenInvalidoException e) {
 			conteudo = e.getMessage();
-			isValido = false;
+		} catch (FalhaAoConectarComSUAPException e) {
+			conteudo = e.getMessage();
+			throw e;
 		}
 		
 		this.clienteSUAP = clienteSUAP;
@@ -51,7 +57,7 @@ public class Token {
 		this.valido = isValido;
 	}
 
-	public <T extends UsuarioSUAP> T getUsuario(Class<T> clazz) {
-		return this.clienteSUAP.getUsuario(clazz);
+	public AlunoSUAP asAluno() {
+		return this.clienteSUAP.getUsuario(AlunoSUAP.class);
 	}
 }

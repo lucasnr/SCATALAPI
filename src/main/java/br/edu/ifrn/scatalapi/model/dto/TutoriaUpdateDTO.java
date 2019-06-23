@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class TutoriaUpdateDTO {
 
-	private List<TutorUpdateDTO> tutores;
+	private List<MatriculaDTO> tutores;
 }
