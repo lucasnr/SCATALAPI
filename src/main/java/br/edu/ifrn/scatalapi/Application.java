@@ -16,10 +16,10 @@ public class Application {
   
     @Bean
     public FilterRegistrationBean<AutenticacaoFilter> filter(){
-    	FilterRegistrationBean<AutenticacaoFilter> filterRegistrationBean = new FilterRegistrationBean<>();
-    	filterRegistrationBean.setFilter(new AutenticacaoFilter());
-    	filterRegistrationBean.addUrlPatterns("/*");
+    	FilterRegistrationBean<AutenticacaoFilter> registradorDeFiltro = new FilterRegistrationBean<>();
+    	registradorDeFiltro.setFilter(new AutenticacaoFilter());
+    	registradorDeFiltro.addUrlPatterns("/*");
     	
-    	return filterRegistrationBean;
+    	return registradorDeFiltro;
     }
 }
