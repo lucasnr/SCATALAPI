@@ -25,7 +25,7 @@ public class AlunoController {
 	private AlunoRepository repository;
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<AlunoResponseDTO> get() {
+	public List<AlunoResponseDTO> finddAll() {
 		List<Aluno> all = repository.findAll();
 		List<AlunoResponseDTO> alunos = all.stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
 		return alunos;
@@ -33,7 +33,7 @@ public class AlunoController {
 	
 
 	@GetMapping(value = "/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public AlunoResponseDTO get(@RequestHeader("token") String headerToken, @PathVariable String matricula) {
+	public AlunoResponseDTO findByMatricula(@RequestHeader("token") String headerToken, @PathVariable String matricula) {
 		
 		Token token = new Token(headerToken);
 		if (!token.isValido()) {

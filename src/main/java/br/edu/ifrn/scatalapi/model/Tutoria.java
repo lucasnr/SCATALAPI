@@ -43,11 +43,11 @@ public class Tutoria implements Serializable {
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "TUTOR", joinColumns = {
 			@JoinColumn(name = "TUTORIA_ID") }, inverseJoinColumns = @JoinColumn(name = "ALUNO_ID"))
-	private List<Aluno> tutores;
+	@Setter private List<Aluno> tutores;
 
 	@OneToOne
 	@JoinColumn(name = "DISCIPLINA_ID")
-	@Setter private Disciplina disciplina;
+	private Disciplina disciplina;
 
 	@OneToMany(mappedBy = "tutoria", fetch = FetchType.LAZY)
 	@OrderBy("registro desc")

@@ -3,7 +3,7 @@ package br.edu.ifrn.scatalapi.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "O token não é válido")
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "O token informado não é válido")
 public class NaoAutorizadoTokenInvalidoException extends RuntimeException{
 
 	/**
