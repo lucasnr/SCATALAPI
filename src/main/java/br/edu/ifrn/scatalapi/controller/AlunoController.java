@@ -3,6 +3,7 @@ package br.edu.ifrn.scatalapi.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -26,41 +27,45 @@ import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 @RestController
 @RequestMapping("/aluno")
 public class AlunoController {
-	
+
 	@Autowired
 	private AlunoRepository repository;
 
 	@Autowired
 	private PostagemRepository postagemRepository;
-	
+
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<AlunoResponseDTO> finddAll(@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
+	public Page<AlunoResponseDTO> findAll(
+			@PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 		return repository.findAll(paginacao).map(AlunoResponseDTO::new);
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Cacheable(value = "aluno")
 	public AlunoResponseDTO findById(@PathVariable Integer id) {
 		Optional<Aluno> aluno = repository.findById(id);
-		if (! aluno.isPresent())
+		if (!aluno.isPresent())
 			throw new RecursoNaoEncontradoException();
-		
+
 		return new AlunoResponseDTO(aluno.get());
 	}
-	
+
 	@GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@Cacheable(value = "alunoByMatricula")
 	public AlunoResponseDTO findByMatricula(@RequestBody MatriculaDTO matricula) {
 		Optional<Aluno> aluno = repository.findByMatricula(matricula.getMatricula());
-		if (! aluno.isPresent())
+		if (!aluno.isPresent())
 			throw new AlunoComMatriculaNaoEncontrado();
-		
+
 		return new AlunoResponseDTO(aluno.get());
 	}
-	
+
 	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findDuvidasById(@PathVariable Integer id, @PageableDefault(page=0, size=5, sort="registro", direction=Direction.DESC) Pageable paginacao){
-		if (! repository.findById(id).isPresent())
+	public Page<DuvidaResponseDTO> findDuvidasById(@PathVariable Integer id,
+			@PageableDefault(page = 0, size = 5, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
+		if (!repository.findById(id).isPresent())
 			throw new RecursoNaoEncontradoException();
-		
+
 		return postagemRepository.findDuvidasByCriadorId(paginacao, id).map(DuvidaResponseDTO::new);
 	}
 }

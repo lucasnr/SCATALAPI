@@ -27,4 +27,7 @@ public interface PostagemRepository extends JpaRepository<Postagem, Integer>{
 	@Query("SELECT p FROM Postagem p WHERE p.postagemPai IS NULL AND p.tutoria.id = :id")
 	public Page<Postagem> findDuvidasByTutoriaId(Pageable paginacao, @Param("id") Integer id);
 
+	@Query("SELECT p FROM Postagem p WHERE p.postagemPai IS NULL AND p.titulo LIKE %:conteudo% OR p.descricao LIKE %:conteudo%")
+	public Page<Postagem> findAnyDuvidas(Pageable paginacao, @Param("conteudo") String conteudo);
+
 }

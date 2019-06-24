@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -47,6 +49,7 @@ public class TutoriaController {
 	private AlunoRepository alunoRepository;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@Cacheable(value = "tutorias")
 	public List<TutoriaResponseDTO> findAll() {
 		List<TutoriaResponseDTO> tutorias = repository.findAll().
 				stream().map(TutoriaResponseDTO::new).
@@ -55,6 +58,7 @@ public class TutoriaController {
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Cacheable(value = "tutoria")
 	public TutoriaDetalhadaResponseDTO findById(@PathVariable Integer id) {
 		Optional<Tutoria> tutoria = repository.findById(id);
 		if (!tutoria.isPresent())
@@ -64,6 +68,7 @@ public class TutoriaController {
 	}
 
 	@GetMapping(value = "/{id}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Cacheable(value = "tutores")
 	public List<AlunoResponseDTO> findTutoresByDisciplina(@PathVariable Integer id) {
 		Optional<Tutoria> tutoria = repository.findById(id);
 		if (! tutoria.isPresent())
@@ -82,6 +87,7 @@ public class TutoriaController {
 
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
+	@CacheEvict(value= {"tutorias", "tutoria", "tutores"}, allEntries=true)
 	public ResponseEntity<TutoriaDetalhadaResponseDTO> updateTutoresById(@RequestBody TutoriaUpdateDTO tutoriaDTO,
 			@PathVariable Integer id) {
 		Optional<Tutoria> optional = repository.findById(id);
