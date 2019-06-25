@@ -9,6 +9,8 @@
 	<artifactId>scatalapi</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<name>scatalapi</name>
+	
+	<description>API RESTful do SCATAL</description>
 
 	<dependencies>
 
