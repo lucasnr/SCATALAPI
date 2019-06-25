@@ -17,6 +17,8 @@ public class AlunoResponseDTO {
 	
 	private String matricula;
 	
+	@SerializedName("nome_usual")
+	@JsonProperty("nome_usual")
 	private String nomeUsual;
 
 	@SerializedName("url_foto")
