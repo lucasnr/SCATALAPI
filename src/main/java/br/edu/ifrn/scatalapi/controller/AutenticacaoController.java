@@ -3,6 +3,8 @@ package br.edu.ifrn.scatalapi.controller;
 import java.net.URI;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +22,14 @@ import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
 @RestController
-@RequestMapping("/login")
-public class LoginController {
+@RequestMapping("/auth") //mudar pra auth
+public class AutenticacaoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
 	
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TokenDTO> post(@RequestBody CredenciaisDTO credenciais, UriComponentsBuilder uriBuilder) throws FalhaAoConectarComSUAPException {
+	public ResponseEntity<TokenDTO> authenticate(@RequestBody @Valid CredenciaisDTO credenciais, UriComponentsBuilder uriBuilder) throws FalhaAoConectarComSUAPException {
 		ResponseEntity<TokenDTO> resposta;
 
 		TokenDTO token = new TokenDTO(credenciais);
