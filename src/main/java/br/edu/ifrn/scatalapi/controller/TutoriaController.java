@@ -69,7 +69,7 @@ public class TutoriaController {
 
 	@GetMapping(value = "/{id}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "tutores")
-	public List<AlunoResponseDTO> findTutoresByDisciplina(@PathVariable Integer id) {
+	public List<AlunoResponseDTO> findTutoresById(@PathVariable Integer id) {
 		Optional<Tutoria> tutoria = repository.findById(id);
 		if (! tutoria.isPresent())
 			throw new RecursoNaoEncontradoException();
@@ -80,7 +80,7 @@ public class TutoriaController {
 	}
 
 	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findDuvidasByDisciplina(@PathVariable Integer id,
+	public Page<DuvidaResponseDTO> findDuvidasById(@PathVariable Integer id,
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
 		return postagemRepository.findDuvidasByTutoriaId(paginacao, id).map(DuvidaResponseDTO::new);
 	}

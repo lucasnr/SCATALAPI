@@ -50,7 +50,7 @@ public class AlunoController {
 		return new AlunoResponseDTO(aluno.get());
 	}
 
-	@GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/busca", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "alunoByMatricula")
 	public AlunoResponseDTO findByMatricula(@RequestBody MatriculaDTO matricula) {
 		Optional<Aluno> aluno = repository.findByMatricula(matricula.getMatricula());
