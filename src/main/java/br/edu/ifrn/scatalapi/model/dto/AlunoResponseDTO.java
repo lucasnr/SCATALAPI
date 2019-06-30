@@ -1,5 +1,6 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +10,12 @@ import br.edu.ifrn.scatalapi.model.Aluno;
 import lombok.Data;
 
 @Data
-public class AlunoResponseDTO {
+public class AlunoResponseDTO implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 	

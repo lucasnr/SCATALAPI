@@ -1,8 +1,7 @@
 package br.edu.ifrn.scatalapi.controller;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifrn.scatalapi.exception.RecursoNaoEncontradoException;
+import br.edu.ifrn.scatalapi.exception.RespostaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.dto.RespostaResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.RespostaUpdateDTO;
@@ -36,7 +35,8 @@ public class RespostaController {
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<RespostaResponseDTO> updateById(@PathVariable Integer id, @RequestBody RespostaUpdateDTO respostaDTO){
+	public ResponseEntity<RespostaResponseDTO> updateById(@PathVariable Integer id, 
+			@RequestBody @Valid RespostaUpdateDTO respostaDTO){
 		Postagem resposta = getRespostaOrThrowException(id);
 		resposta.setDescricao(respostaDTO.getDescricao());
 		return ResponseEntity.ok(new RespostaResponseDTO(resposta));
@@ -48,14 +48,11 @@ public class RespostaController {
 			repository.deleteById(id);
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
-			throw new RecursoNaoEncontradoException();
+			throw new RespostaComIdNaoEncontradaException();
 		}
 	}
 	
-	private Postagem getRespostaOrThrowException(Integer id) {
-		Optional<Postagem> resposta = repository.findRespostaById(id);
-		if (! resposta.isPresent())
-			throw new RecursoNaoEncontradoException();
-		return resposta.get();
+	private Postagem getRespostaOrThrowException(Integer id) throws RespostaComIdNaoEncontradaException {
+		return repository.findRespostaById(id).orElseThrow(RespostaComIdNaoEncontradaException::new);
 	}
 }

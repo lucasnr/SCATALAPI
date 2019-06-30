@@ -59,6 +59,10 @@ public class Tutoria implements Serializable {
 		this.postagens = new ArrayList<>();
 	}
 
+	public Tutoria(Integer id) {
+		this.id = id;
+	}
+
 	public void addPostagem(Postagem postagem) {
 		postagem.setTutoria(this);
 		if (!this.postagens.contains(postagem) && postagem.getId() == null)

@@ -1,5 +1,6 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,7 +8,12 @@ import br.edu.ifrn.scatalapi.model.Tutoria;
 import lombok.Data;
 
 @Data
-public class TutoriaDetalhadaResponseDTO{
+public class TutoriaDetalhadaResponseDTO implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 

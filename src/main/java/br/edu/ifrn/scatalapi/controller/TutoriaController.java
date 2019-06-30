@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
-import br.edu.ifrn.scatalapi.exception.RecursoNaoEncontradoException;
+import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
@@ -51,30 +52,23 @@ public class TutoriaController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "tutorias")
 	public List<TutoriaResponseDTO> findAll() {
-		List<TutoriaResponseDTO> tutorias = repository.findAll().
-				stream().map(TutoriaResponseDTO::new).
-				collect(Collectors.toList());
+		List<TutoriaResponseDTO> tutorias = repository.findAll()
+				.stream().map(TutoriaResponseDTO::new).collect(Collectors.toList());
 		return tutorias;
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "tutoria")
 	public TutoriaDetalhadaResponseDTO findById(@PathVariable Integer id) {
-		Optional<Tutoria> tutoria = repository.findById(id);
-		if (!tutoria.isPresent())
-			throw new RecursoNaoEncontradoException();
-
-		return new TutoriaDetalhadaResponseDTO(tutoria.get());
+		Tutoria tutoria = getTutoriaOrThrowException(id);
+		return new TutoriaDetalhadaResponseDTO(tutoria);
 	}
 
 	@GetMapping(value = "/{id}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "tutores")
 	public List<AlunoResponseDTO> findTutoresById(@PathVariable Integer id) {
-		Optional<Tutoria> tutoria = repository.findById(id);
-		if (! tutoria.isPresent())
-			throw new RecursoNaoEncontradoException();
-
-		List<AlunoResponseDTO> tutores = tutoria.get().getTutores().
+		Tutoria tutoria = getTutoriaOrThrowException(id);
+		List<AlunoResponseDTO> tutores = tutoria.getTutores().
 				stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
 		return tutores;
 	}
@@ -88,13 +82,10 @@ public class TutoriaController {
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	@CacheEvict(value= {"tutorias", "tutoria", "tutores"}, allEntries=true)
-	public ResponseEntity<TutoriaDetalhadaResponseDTO> updateTutoresById(@RequestBody TutoriaUpdateDTO tutoriaDTO,
-			@PathVariable Integer id) {
-		Optional<Tutoria> optional = repository.findById(id);
-		if (!optional.isPresent())
-			throw new RecursoNaoEncontradoException();
-
-		Tutoria tutoria = optional.get();
+	public ResponseEntity<TutoriaDetalhadaResponseDTO> updateTutoresById(@PathVariable Integer id,
+			@RequestBody @Valid TutoriaUpdateDTO tutoriaDTO) {
+		
+		Tutoria tutoria = getTutoriaOrThrowException(id);
 		try {
 			List<Aluno> tutores = tutoriaDTO.getTutores().stream()
 					.map(m -> alunoRepository.findByMatricula(m.getMatricula())).map(Optional::get)
@@ -105,5 +96,9 @@ public class TutoriaController {
 		} catch (Exception e) {
 			throw new AlunoComMatriculaNaoEncontrado();
 		}
+	}
+	
+	private Tutoria getTutoriaOrThrowException(Integer id) throws TutoriaComIdNaoEncontradaException {
+		return repository.findById(id).orElseThrow(TutoriaComIdNaoEncontradaException::new);
 	}
 }

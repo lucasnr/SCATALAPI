@@ -1,5 +1,7 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import java.io.Serializable;
+
 import br.edu.ifrn.suapi.ClienteSUAP;
 import br.edu.ifrn.suapi.exception.CredenciaisIncorretasException;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
@@ -7,8 +9,13 @@ import br.edu.ifrn.suapi.exception.TokenInvalidoException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 import lombok.Getter;
 
-public class TokenDTO {
+public class TokenDTO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	@Getter private final String conteudo;
 	@Getter private final boolean valido;
 	

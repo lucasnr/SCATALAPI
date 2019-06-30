@@ -1,5 +1,6 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +10,12 @@ import br.edu.ifrn.scatalapi.model.Postagem;
 import lombok.Data;
 
 @Data
-public class DuvidaResponseDTO {
+public class DuvidaResponseDTO implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 	
@@ -19,9 +25,9 @@ public class DuvidaResponseDTO {
 	
 	private Date registro;
 	
-	@SerializedName("disciplina")
-	@JsonProperty("disciplina")
-	private String disciplinaUsual;
+	@SerializedName("tutoria_id")
+	@JsonProperty("tutoria_id")
+	private Integer idDaTutoria;
 	
 	@SerializedName("aluno_id")
 	@JsonProperty("aluno_id")
@@ -33,6 +39,6 @@ public class DuvidaResponseDTO {
 		this.descricao = postagem.getDescricao();
 		this.registro = postagem.getRegistro();
 		this.idDoAluno = postagem.getCriador().getId();
-		this.disciplinaUsual = postagem.getTutoria().getDisciplina().getNomeUsual();
+		this.idDaTutoria = postagem.getTutoria().getId();
 	}
 }

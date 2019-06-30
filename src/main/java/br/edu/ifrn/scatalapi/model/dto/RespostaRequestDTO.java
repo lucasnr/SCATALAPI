@@ -1,14 +1,22 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
+import java.io.Serializable;
+
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
 
 @Data
-public class RespostaRequestDTO {
+public class RespostaRequestDTO implements Serializable {
 
-	@SerializedName("aluno_id")
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@NotNull(message = "O id do aluno criador da resposta é obrigatório")
 	@JsonProperty("aluno_id")
 	private Integer idDoAluno;
 
