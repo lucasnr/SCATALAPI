@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradaException;
+import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
@@ -38,6 +39,7 @@ import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 
 @RestController
 @RequestMapping("/tutoria")
+@AutenticadoRequired
 public class TutoriaController {
 
 	@Autowired

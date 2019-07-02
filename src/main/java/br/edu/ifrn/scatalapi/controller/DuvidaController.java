@@ -28,6 +28,7 @@ import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.DuvidaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.exception.FalhaAoSalvarNoBancoDeDadosException;
 import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradaException;
+import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.Tutoria;
@@ -42,6 +43,7 @@ import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 
 @RestController
 @RequestMapping("/duvida")
+@AutenticadoRequired
 public class DuvidaController {
 
 	@Autowired

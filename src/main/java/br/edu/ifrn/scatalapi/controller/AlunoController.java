@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
+import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
@@ -22,6 +23,7 @@ import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 
 @RestController
 @RequestMapping("/aluno")
+@AutenticadoRequired
 public class AlunoController {
 
 	@Autowired

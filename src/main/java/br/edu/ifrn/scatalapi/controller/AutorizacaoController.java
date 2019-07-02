@@ -22,8 +22,8 @@ import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
 @RestController
-@RequestMapping("/auth") //mudar pra auth
-public class AutenticacaoController {
+@RequestMapping("/auth")
+public class AutorizacaoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
