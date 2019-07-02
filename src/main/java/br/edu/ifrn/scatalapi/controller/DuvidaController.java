@@ -31,7 +31,6 @@ import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.Tutoria;
-import br.edu.ifrn.scatalapi.model.dto.BuscaDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaRequestDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaUpdateDTO;
@@ -67,15 +66,15 @@ public class DuvidaController {
 				stream().map(RespostaResponseDTO::new).collect(Collectors.toList());
 	}
 	
-	@GetMapping(value = "/busca", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findAny(@RequestBody @Valid BuscaDTO busca, 
+	@GetMapping(value = "/busca/{conteudo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Page<DuvidaResponseDTO> findBySearch(@PathVariable String conteudo, 
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao){
-		return repository.findAnyDuvidas(paginacao, busca.getConteudo()).map(DuvidaResponseDTO::new);
+		return repository.findAnyDuvidas(paginacao, conteudo).map(DuvidaResponseDTO::new);
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<DuvidaResponseDTO> postDuvida(@RequestBody @Valid DuvidaRequestDTO duvida, 
+	public ResponseEntity<DuvidaResponseDTO> post(@RequestBody @Valid DuvidaRequestDTO duvida, 
 			UriComponentsBuilder uriBuilder) {
 		Aluno aluno = findAluno(duvida.getIdDoAluno());
 		Tutoria tutoria = findTutoriaDaDuvida(duvida);
@@ -114,7 +113,7 @@ public class DuvidaController {
 	
 	@PutMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<DuvidaResponseDTO> updateDuvidaById(@PathVariable Integer id, 
+	public ResponseEntity<DuvidaResponseDTO> updateById(@PathVariable Integer id, 
 			@RequestBody @Valid DuvidaUpdateDTO duvida){
 		Postagem postagem = getDuvidaOrThrowException(id);
 		postagem.setTitulo(duvida.getTitulo());
@@ -124,7 +123,7 @@ public class DuvidaController {
 
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> deleteDuvidaById(@PathVariable Integer id){
+	public ResponseEntity<?> deleteById(@PathVariable Integer id){
 		try {
 			repository.deleteById(id);			
 			return ResponseEntity.ok().build();

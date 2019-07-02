@@ -1,7 +1,5 @@
 package br.edu.ifrn.scatalapi.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -11,7 +9,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +17,6 @@ import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.MatriculaDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 
@@ -47,10 +43,10 @@ public class AlunoController {
 		return new AlunoResponseDTO(aluno);
 	}
 
-	@GetMapping(value = "/busca", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/busca/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "alunoByMatricula")
-	public AlunoResponseDTO findByMatricula(@RequestBody @Valid MatriculaDTO matricula) {
-		Aluno aluno = repository.findByMatricula(matricula.getMatricula())
+	public AlunoResponseDTO findByMatricula(@PathVariable String matricula) {
+		Aluno aluno = repository.findByMatricula(matricula)
 				.orElseThrow(AlunoComMatriculaNaoEncontrado::new);
 		return new AlunoResponseDTO(aluno);
 	}
