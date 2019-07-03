@@ -1,8 +1,6 @@
 package br.edu.ifrn.scatalapi.controller;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -62,16 +60,24 @@ public class DuvidaController {
 	}
 	
 	@GetMapping(value = "/{id}/respostas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<RespostaResponseDTO> findRespostasById(@PathVariable Integer id) {
+	public ResponseEntity<Page<RespostaResponseDTO>> findRespostasById(@PathVariable Integer id,
+			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
 		Postagem postagem = getDuvidaOrThrowException(id);
-		return postagem.getRespostas().
-				stream().map(RespostaResponseDTO::new).collect(Collectors.toList());
+		Page<Postagem> respostas = repository.findRespostasByDuvidaId(paginacao, postagem.getId());
+		if(respostas.isEmpty())
+			return ResponseEntity.noContent().build();
+		
+		return ResponseEntity.ok().body(respostas.map(RespostaResponseDTO::new));
 	}
 	
 	@GetMapping(value = "/busca/{conteudo}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findBySearch(@PathVariable String conteudo, 
+	public ResponseEntity<Page<DuvidaResponseDTO>> findBySearch(@PathVariable String conteudo, 
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao){
-		return repository.findAnyDuvidas(paginacao, conteudo).map(DuvidaResponseDTO::new);
+		Page<Postagem> duvidasEncontradas = repository.findAnyDuvidas(paginacao, conteudo);
+		if (duvidasEncontradas.isEmpty()) 
+			return ResponseEntity.noContent().build();
+		
+		return ResponseEntity.ok().body(duvidasEncontradas.map(DuvidaResponseDTO::new));
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -88,8 +94,9 @@ public class DuvidaController {
 			URI location = uriBuilder.path("/duvida/{id}")
 					.buildAndExpand(duvidaDTO.getId()).toUri();
 			return ResponseEntity.created(location).body(duvidaDTO);
-		} else
-			throw new FalhaAoSalvarNoBancoDeDadosException();
+		} 
+		
+		throw new FalhaAoSalvarNoBancoDeDadosException();
 	}
 	
 	@PostMapping(value = "/{id}/resposta", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -135,8 +142,8 @@ public class DuvidaController {
 	}
 	
 	private Postagem getDuvidaOrThrowException(Integer id) {
-		return repository.findDuvidaById(id).
-				orElseThrow(DuvidaComIdNaoEncontradaException::new);
+		return repository.findDuvidaById(id)
+				.orElseThrow(DuvidaComIdNaoEncontradaException::new);
 	}
 	
 	private Postagem createPostagem(DuvidaRequestDTO duvida, Aluno criador, Tutoria tutoria) {

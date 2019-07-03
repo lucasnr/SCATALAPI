@@ -27,6 +27,7 @@ import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
+import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
@@ -68,17 +69,23 @@ public class TutoriaController {
 
 	@GetMapping(value = "/{id}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Cacheable(value = "tutores")
-	public List<AlunoResponseDTO> findTutoresById(@PathVariable Integer id) {
+	public ResponseEntity<List<AlunoResponseDTO>> findTutoresById(@PathVariable Integer id) {
 		Tutoria tutoria = getTutoriaOrThrowException(id);
-		List<AlunoResponseDTO> tutores = tutoria.getTutores().
-				stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
-		return tutores;
+		List<Aluno> tutores = tutoria.getTutores();
+		if (tutores.isEmpty())
+			return ResponseEntity.noContent().build();
+		
+		return ResponseEntity.ok().body(tutores.stream().map(AlunoResponseDTO::new).collect(Collectors.toList()));
 	}
 
 	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findDuvidasById(@PathVariable Integer id,
+	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@PathVariable Integer id,
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
-		return postagemRepository.findDuvidasByTutoriaId(paginacao, id).map(DuvidaResponseDTO::new);
+		Page<Postagem> duvidas = postagemRepository.findDuvidasByTutoriaId(paginacao, id);
+		if (duvidas.isEmpty())
+			return ResponseEntity.noContent().build();
+		
+		return ResponseEntity.ok().body(duvidas.map(DuvidaResponseDTO::new));
 	}
 
 	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

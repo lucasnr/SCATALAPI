@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
+import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
@@ -33,9 +35,14 @@ public class AlunoController {
 	private PostagemRepository postagemRepository;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<AlunoResponseDTO> findAll(
+	public ResponseEntity<Page<AlunoResponseDTO>> findAll(
 			@PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
-		return repository.findAll(paginacao).map(AlunoResponseDTO::new);
+		
+		Page<Aluno> alunos = repository.findAll(paginacao);
+		if(alunos.isEmpty())
+			return ResponseEntity.noContent().build();
+		
+		return ResponseEntity.ok().body(alunos.map(AlunoResponseDTO::new));
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,11 +61,15 @@ public class AlunoController {
 	}
 
 	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Page<DuvidaResponseDTO> findDuvidasById(@PathVariable Integer id,
+	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@PathVariable Integer id,
 			@PageableDefault(page = 0, size = 5, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 		if (! repository.existsById(id))
 			throw new AlunoComIdNaoEncontradoException();
-
-		return postagemRepository.findDuvidasByCriadorId(paginacao, id).map(DuvidaResponseDTO::new);
+		
+		Page<Postagem> duvidas = postagemRepository.findDuvidasByCriadorId(paginacao, id);
+		if (duvidas.isEmpty())
+			return ResponseEntity.noContent().build();
+		
+		return ResponseEntity.ok().body(duvidas.map(DuvidaResponseDTO::new));
 	}
 }
