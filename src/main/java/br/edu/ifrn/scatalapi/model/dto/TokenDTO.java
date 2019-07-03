@@ -16,8 +16,8 @@ public class TokenDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Getter private final String token;
-	@Getter private final boolean valido;
+	@Getter private final String conteudo;
+	@Getter private transient final boolean valido;
 	
 	private transient ClienteSUAP clienteSUAP;
 	
@@ -41,7 +41,7 @@ public class TokenDTO implements Serializable {
 		}
 		
 		this.valido = isValido;
-		this.token = conteudo;
+		this.conteudo = conteudo;
 	}
 	
 	public TokenDTO(String token) throws FalhaAoConectarComSUAPException {
@@ -60,7 +60,7 @@ public class TokenDTO implements Serializable {
 		}
 		
 		this.clienteSUAP = clienteSUAP;
-		this.token = conteudo;
+		this.conteudo = conteudo;
 		this.valido = isValido;
 	}
 

@@ -16,7 +16,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.dto.CredenciaisDTO;
+import br.edu.ifrn.scatalapi.model.dto.Erro;
 import br.edu.ifrn.scatalapi.model.dto.TokenDTO;
+import br.edu.ifrn.scatalapi.model.dto.TokenVerifyDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
@@ -27,25 +29,35 @@ public class AutorizacaoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
-	
+
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<TokenDTO> authenticate(@RequestBody @Valid CredenciaisDTO credenciais, UriComponentsBuilder uriBuilder) throws FalhaAoConectarComSUAPException {
+	public ResponseEntity<TokenDTO> authenticate(@RequestBody @Valid CredenciaisDTO credenciais,
+			UriComponentsBuilder uriBuilder) throws FalhaAoConectarComSUAPException {
 		ResponseEntity<TokenDTO> resposta;
 
 		TokenDTO token = new TokenDTO(credenciais);
 		if (token.isValido()) {
 			Aluno alunoCriado = saveAlunoIfNotExists(token.asAluno());
-			if(alunoCriado != null) {
-				URI location = uriBuilder.path("/aluno/{id}").buildAndExpand(alunoCriado.getId()).toUri();				
+			if (alunoCriado != null) {
+				URI location = uriBuilder.path("/aluno/{id}").buildAndExpand(alunoCriado.getId()).toUri();
 				resposta = ResponseEntity.created(location).body(token);
 			} else
 				resposta = ResponseEntity.ok(token);
-		} else 
+		} else
 			resposta = ResponseEntity.badRequest().body(token);
-		
+
 		return resposta;
 	}
-	
+
+	@PostMapping(value = "/verify", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> validate(@RequestBody TokenVerifyDTO token) throws FalhaAoConectarComSUAPException {
+		TokenDTO tokenDTO = new TokenDTO(token.getToken());
+		if (tokenDTO.isValido())
+			return ResponseEntity.ok(tokenDTO);
+		
+		return ResponseEntity.badRequest().body(new Erro("Token inválido"));
+	}
+
 	private Aluno saveAlunoIfNotExists(AlunoSUAP alunoSUAP) {
 		Optional<Aluno> optional = alunoRepository.findByMatricula(alunoSUAP.getMatricula());
 		if (optional.isPresent())
