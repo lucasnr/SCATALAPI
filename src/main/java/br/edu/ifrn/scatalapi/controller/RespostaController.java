@@ -8,8 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +35,7 @@ public class RespostaController {
 		return new RespostaResponseDTO(resposta);
 	}
 	
-	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<RespostaResponseDTO> updateById(@PathVariable Integer id, 
 			@RequestBody @Valid RespostaUpdateDTO respostaDTO){
@@ -48,7 +48,7 @@ public class RespostaController {
 	public ResponseEntity<?> deleteById(@PathVariable Integer id){
 		try {
 			repository.deleteById(id);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.noContent().build();
 		} catch (Exception e) {
 			throw new RespostaComIdNaoEncontradaException();
 		}

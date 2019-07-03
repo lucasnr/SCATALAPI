@@ -16,9 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -113,14 +113,14 @@ public class DuvidaController {
 		return ResponseEntity.created(location).body(responseDTO);
 	}
 	
-	@PutMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<DuvidaResponseDTO> updateById(@PathVariable Integer id, 
+	public ResponseEntity<?> updateById(@PathVariable Integer id, 
 			@RequestBody @Valid DuvidaUpdateDTO duvida){
 		Postagem postagem = getDuvidaOrThrowException(id);
 		postagem.setTitulo(duvida.getTitulo());
 		postagem.setDescricao(duvida.getDescricao());
-		return ResponseEntity.ok(new DuvidaResponseDTO(postagem));
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{id}")
@@ -128,7 +128,7 @@ public class DuvidaController {
 	public ResponseEntity<?> deleteById(@PathVariable Integer id){
 		try {
 			repository.deleteById(id);			
-			return ResponseEntity.ok().build();
+			return ResponseEntity.noContent().build();
 		} catch (Exception e) {			
 			throw new DuvidaComIdNaoEncontradaException();
 		}
