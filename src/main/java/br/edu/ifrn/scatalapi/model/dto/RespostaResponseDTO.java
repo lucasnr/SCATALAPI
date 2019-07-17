@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
 
 import br.edu.ifrn.scatalapi.model.Postagem;
 import lombok.Data;
@@ -17,7 +16,6 @@ public class RespostaResponseDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@SerializedName("aluno_id")
 	@JsonProperty("aluno_id")
 	private Integer idDoAluno;
 
@@ -27,7 +25,6 @@ public class RespostaResponseDTO implements Serializable {
 
 	private Date registro;
 
-	@SerializedName("duvida_id")
 	@JsonProperty("duvida_id")
 	private Integer idDaDuvida;
 	

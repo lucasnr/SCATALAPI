@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
 
 import br.edu.ifrn.scatalapi.model.Aluno;
 import lombok.Data;
@@ -23,11 +22,9 @@ public class AlunoResponseDTO implements Serializable{
 	
 	private String matricula;
 	
-	@SerializedName("nome_usual")
 	@JsonProperty("nome_usual")
 	private String nomeUsual;
 
-	@SerializedName("url_foto")
 	@JsonProperty("url_foto")
 	private String urlFoto;
 

@@ -24,19 +24,19 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>2.1.4.RELEASE</version>
+			<version>${springboot.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>2.1.4.RELEASE</version>
+			<version>${springboot.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
-			<version>2.1.4.RELEASE</version>
+			<version>${springboot.version}</version>
 		</dependency>
 
 		<dependency>
@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>io.github.lucasnr</groupId>
 			<artifactId>suapi-simple</artifactId>
-			<version>1.0</version>
+			<version>1.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
@@ -76,6 +76,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<springboot.version>2.1.4.RELEASE</springboot.version>
 	</properties>
 
 	<build>
