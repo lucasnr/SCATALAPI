@@ -22,20 +22,20 @@ import br.edu.ifrn.scatalapi.model.dto.RespostaUpdateDTO;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 
 @RestController
-@RequestMapping("/resposta")
+@RequestMapping(value = "/resposta", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
 public class RespostaController {
 
 	@Autowired
 	private PostagemRepository repository;
 	
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}")
 	public RespostaResponseDTO findById(@PathVariable Integer id) {
 		Postagem resposta = getRespostaOrThrowException(id);
 		return new RespostaResponseDTO(resposta);
 	}
 	
-	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<RespostaResponseDTO> updateById(@PathVariable Integer id, 
 			@RequestBody @Valid RespostaUpdateDTO respostaDTO){
@@ -44,7 +44,8 @@ public class RespostaController {
 		return ResponseEntity.ok(new RespostaResponseDTO(resposta));
 	}
 	
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping("/{id}")
+	@Transactional
 	public ResponseEntity<?> deleteById(@PathVariable Integer id){
 		try {
 			repository.deleteById(id);

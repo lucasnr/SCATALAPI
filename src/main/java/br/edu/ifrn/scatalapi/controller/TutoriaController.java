@@ -39,7 +39,7 @@ import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 
 @RestController
-@RequestMapping("/tutoria")
+@RequestMapping(value = "/tutoria", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
 public class TutoriaController {
 
@@ -52,7 +52,7 @@ public class TutoriaController {
 	@Autowired
 	private AlunoRepository alunoRepository;
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	@Cacheable(value = "tutorias")
 	public List<TutoriaResponseDTO> findAll() {
 		List<TutoriaResponseDTO> tutorias = repository.findAll()
@@ -60,14 +60,14 @@ public class TutoriaController {
 		return tutorias;
 	}
 
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/{id}")
 	@Cacheable(value = "tutoria")
 	public TutoriaDetalhadaResponseDTO findById(@PathVariable Integer id) {
 		Tutoria tutoria = getTutoriaOrThrowException(id);
 		return new TutoriaDetalhadaResponseDTO(tutoria);
 	}
 
-	@GetMapping(value = "/{id}/tutores", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/{id}/tutores")
 	@Cacheable(value = "tutores")
 	public ResponseEntity<List<AlunoResponseDTO>> findTutoresById(@PathVariable Integer id) {
 		Tutoria tutoria = getTutoriaOrThrowException(id);
@@ -78,7 +78,7 @@ public class TutoriaController {
 		return ResponseEntity.ok().body(tutores.stream().map(AlunoResponseDTO::new).collect(Collectors.toList()));
 	}
 
-	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/{id}/duvidas")
 	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@PathVariable Integer id,
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
 		Page<Postagem> duvidas = postagemRepository.findDuvidasByTutoriaId(paginacao, id);
@@ -88,7 +88,7 @@ public class TutoriaController {
 		return ResponseEntity.ok().body(duvidas.map(DuvidaResponseDTO::new));
 	}
 
-	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	@CacheEvict(value= {"tutorias", "tutoria", "tutores"}, allEntries=true)
 	public ResponseEntity<TutoriaDetalhadaResponseDTO> updateTutoresById(@PathVariable Integer id,

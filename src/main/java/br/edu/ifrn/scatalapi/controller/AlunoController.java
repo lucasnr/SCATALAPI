@@ -24,7 +24,7 @@ import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 
 @RestController
-@RequestMapping("/aluno")
+@RequestMapping(value = "/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
 public class AlunoController {
 
@@ -34,7 +34,7 @@ public class AlunoController {
 	@Autowired
 	private PostagemRepository postagemRepository;
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping
 	public ResponseEntity<Page<AlunoResponseDTO>> findAll(
 			@PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 		
@@ -45,14 +45,14 @@ public class AlunoController {
 		return ResponseEntity.ok().body(alunos.map(AlunoResponseDTO::new));
 	}
 
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}")
 	@Cacheable(value = "aluno")
 	public AlunoResponseDTO findById(@PathVariable Integer id) {
 		Aluno aluno = repository.findById(id).orElseThrow(AlunoComIdNaoEncontradoException::new);
 		return new AlunoResponseDTO(aluno);
 	}
 
-	@GetMapping(value = "/busca/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/busca/{matricula}")
 	@Cacheable(value = "alunoByMatricula")
 	public AlunoResponseDTO findByMatricula(@PathVariable String matricula) {
 		Aluno aluno = repository.findByMatricula(matricula)
@@ -60,7 +60,7 @@ public class AlunoController {
 		return new AlunoResponseDTO(aluno);
 	}
 
-	@GetMapping(value = "/{id}/duvidas", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}/duvidas")
 	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@PathVariable Integer id,
 			@PageableDefault(page = 0, size = 5, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 		if (! repository.existsById(id))

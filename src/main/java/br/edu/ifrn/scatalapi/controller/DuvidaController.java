@@ -40,7 +40,7 @@ import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 
 @RestController
-@RequestMapping("/duvida")
+@RequestMapping(value = "/duvida", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
 public class DuvidaController {
 
@@ -53,13 +53,13 @@ public class DuvidaController {
 	@Autowired
 	private TutoriaRepository tutoriaRepository;
 
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/{id}")
 	public DuvidaResponseDTO findById(@PathVariable Integer id) {
 		Postagem postagem = getDuvidaOrThrowException(id);
 		return new DuvidaResponseDTO(postagem);
 	}
 	
-	@GetMapping(value = "/{id}/respostas", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/{id}/respostas")
 	public ResponseEntity<Page<RespostaResponseDTO>> findRespostasById(@PathVariable Integer id,
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {
 		Postagem postagem = getDuvidaOrThrowException(id);
@@ -70,7 +70,7 @@ public class DuvidaController {
 		return ResponseEntity.ok().body(respostas.map(RespostaResponseDTO::new));
 	}
 	
-	@GetMapping(value = "/busca/{conteudo}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping("/busca/{conteudo}")
 	public ResponseEntity<Page<DuvidaResponseDTO>> findBySearch(@PathVariable String conteudo, 
 			@PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao){
 		Page<Postagem> duvidasEncontradas = repository.findAnyDuvidas(paginacao, conteudo);
@@ -80,7 +80,7 @@ public class DuvidaController {
 		return ResponseEntity.ok().body(duvidasEncontradas.map(DuvidaResponseDTO::new));
 	}
 
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<DuvidaResponseDTO> post(@RequestBody @Valid DuvidaRequestDTO duvida, 
 			UriComponentsBuilder uriBuilder) {
@@ -99,7 +99,7 @@ public class DuvidaController {
 		throw new FalhaAoSalvarNoBancoDeDadosException();
 	}
 	
-	@PostMapping(value = "/{id}/resposta", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/{id}/resposta", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<RespostaResponseDTO> postResposta(@PathVariable Integer id, 
 			@RequestBody @Valid RespostaRequestDTO resposta, UriComponentsBuilder uriBuilder){
@@ -120,7 +120,7 @@ public class DuvidaController {
 		return ResponseEntity.created(location).body(responseDTO);
 	}
 	
-	@PatchMapping(value="/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	public ResponseEntity<?> updateById(@PathVariable Integer id, 
 			@RequestBody @Valid DuvidaUpdateDTO duvida){

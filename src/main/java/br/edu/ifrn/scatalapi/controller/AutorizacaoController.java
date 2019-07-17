@@ -16,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.dto.CredenciaisDTO;
-import br.edu.ifrn.scatalapi.model.dto.Erro;
 import br.edu.ifrn.scatalapi.model.dto.TokenDTO;
 import br.edu.ifrn.scatalapi.model.dto.TokenVerifyDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
@@ -24,13 +23,13 @@ import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(value="/auth", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class AutorizacaoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
 
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping
 	public ResponseEntity<TokenDTO> authenticate(@RequestBody @Valid CredenciaisDTO credenciais,
 			UriComponentsBuilder uriBuilder) throws FalhaAoConectarComSUAPException {
 		ResponseEntity<TokenDTO> resposta;
@@ -49,13 +48,10 @@ public class AutorizacaoController {
 		return resposta;
 	}
 
-	@PostMapping(value = "/verify", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/verify")
 	public ResponseEntity<?> validate(@RequestBody TokenVerifyDTO token) throws FalhaAoConectarComSUAPException {
 		TokenDTO tokenDTO = new TokenDTO(token.getToken());
-		if (tokenDTO.isValido())
-			return ResponseEntity.ok(tokenDTO);
-		
-		return ResponseEntity.badRequest().body(new Erro("Token inválido"));
+		return ResponseEntity.ok(tokenDTO);
 	}
 
 	private Aluno saveAlunoIfNotExists(AlunoSUAP alunoSUAP) {
