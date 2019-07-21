@@ -7,8 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.edu.ifrn.scatalapi.model.Postagem;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class DuvidaResponseDTO implements Serializable {
 
 	/**

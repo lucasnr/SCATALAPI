@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class TutoriaDetalhadaResponseDTO implements Serializable{
 
 	/**
@@ -17,9 +21,10 @@ public class TutoriaDetalhadaResponseDTO implements Serializable{
 
 	private Integer id;
 
-	private String disciplina;
+	private String nome;
 
-	private String disciplinaUsual;
+	@JsonProperty("nome_usual")
+	private String nomeUsual;
 
 	private List<AlunoResponseDTO> tutores;
 	
@@ -27,8 +32,8 @@ public class TutoriaDetalhadaResponseDTO implements Serializable{
 
 	public TutoriaDetalhadaResponseDTO(Tutoria tutoria) {
 		this.id = tutoria.getId();
-		this.disciplina = tutoria.getDisciplina().getNome();
-		this.disciplinaUsual = tutoria.getDisciplina().getNomeUsual();
+		this.nome = tutoria.getDisciplina().getNome();
+		this.nomeUsual = tutoria.getDisciplina().getNomeUsual();
 		this.tutores = tutoria.getTutores().stream().map(AlunoResponseDTO::new).collect(Collectors.toList());
 		this.curso = tutoria.getDisciplina().getCurso().getNome();
 	}

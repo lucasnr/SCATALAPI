@@ -28,9 +28,5 @@ public class DuvidaRequestDTO implements Serializable {
 	@NotNull(message = "O id da tutoria da dúvida é obrigatório")
 	@JsonProperty("tutoria_id")
 	private Integer idDaTutoria;
-	
-	@NotNull(message = "O id do aluno criador da dúvida é obrigatório")
-	@JsonProperty("aluno_id")
-	private Integer idDoAluno;
 
 }
