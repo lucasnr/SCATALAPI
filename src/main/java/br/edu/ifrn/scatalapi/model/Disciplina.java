@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @NoArgsConstructor
@@ -38,13 +39,13 @@ public class Disciplina implements Serializable {
 	private Integer id;
 	
 	@Column(name = "NOME")
-	private String nome;
+	@Setter private String nome;
 	
 	@Column(name = "DESCRICAO", columnDefinition = "TEXT")
 	private String descricao;
 	
 	@Column(name = "NOME_USUAL")
-	private String nomeUsual;
+	@Setter private String nomeUsual;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CURSO_ID")
