@@ -17,11 +17,8 @@ import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
-import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
-import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 
 @RestController
 @RequestMapping(value = "/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,9 +27,6 @@ public class AlunoController {
 
 	@Autowired
 	private AlunoRepository repository;
-
-	@Autowired
-	private PostagemRepository postagemRepository;
 
 	@GetMapping
 	public ResponseEntity<Page<AlunoResponseDTO>> findAll(
@@ -52,7 +46,7 @@ public class AlunoController {
 		return new AlunoResponseDTO(aluno);
 	}
 
-	@GetMapping(value = "/busca/{matricula}")
+	@GetMapping(value = "/matricula/{matricula}")
 	@Cacheable(value = "alunoByMatricula")
 	public AlunoResponseDTO findByMatricula(@PathVariable String matricula) {
 		Aluno aluno = repository.findByMatricula(matricula)
@@ -60,16 +54,4 @@ public class AlunoController {
 		return new AlunoResponseDTO(aluno);
 	}
 
-	@GetMapping(value = "/{id}/duvidas")
-	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@PathVariable Integer id,
-			@PageableDefault(page = 0, size = 5, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
-		if (! repository.existsById(id))
-			throw new AlunoComIdNaoEncontradoException();
-		
-		Page<Postagem> duvidas = postagemRepository.findDuvidasByCriadorId(paginacao, id);
-		if (duvidas.isEmpty())
-			return ResponseEntity.noContent().build();
-		
-		return ResponseEntity.ok().body(duvidas.map(DuvidaResponseDTO::new));
-	}
 }

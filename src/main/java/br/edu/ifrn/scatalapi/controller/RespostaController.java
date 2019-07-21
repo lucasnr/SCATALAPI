@@ -31,7 +31,7 @@ public class RespostaController {
 	
 	@GetMapping(value = "/{id}")
 	public RespostaResponseDTO findById(@PathVariable Integer id) {
-		Postagem resposta = getRespostaOrThrowException(id);
+		Postagem resposta = findRespostaOrThrowException(id);
 		return new RespostaResponseDTO(resposta);
 	}
 	
@@ -39,7 +39,7 @@ public class RespostaController {
 	@Transactional
 	public ResponseEntity<RespostaResponseDTO> updateById(@PathVariable Integer id, 
 			@RequestBody @Valid RespostaUpdateDTO respostaDTO){
-		Postagem resposta = getRespostaOrThrowException(id);
+		Postagem resposta = findRespostaOrThrowException(id);
 		resposta.setDescricao(respostaDTO.getDescricao());
 		return ResponseEntity.ok(new RespostaResponseDTO(resposta));
 	}
@@ -55,7 +55,7 @@ public class RespostaController {
 		}
 	}
 	
-	private Postagem getRespostaOrThrowException(Integer id) throws RespostaComIdNaoEncontradaException {
+	private Postagem findRespostaOrThrowException(Integer id) throws RespostaComIdNaoEncontradaException {
 		return repository.findRespostaById(id).orElseThrow(RespostaComIdNaoEncontradaException::new);
 	}
 }
