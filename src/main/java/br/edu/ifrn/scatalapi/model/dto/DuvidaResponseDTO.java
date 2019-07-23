@@ -1,10 +1,12 @@
 package br.edu.ifrn.scatalapi.model.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import br.edu.ifrn.scatalapi.jackson.LocalDateTimeDeserializer;
 import br.edu.ifrn.scatalapi.model.Postagem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,8 +25,9 @@ public class DuvidaResponseDTO implements Serializable {
 	private String titulo;
 	
 	private String descricao;
-	
-	private Date registro;
+
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime registro;
 	
 	@JsonProperty("tutoria_id")
 	private Integer idDaTutoria;

@@ -1,8 +1,8 @@
 package br.edu.ifrn.scatalapi.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +21,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import br.edu.ifrn.scatalapi.util.CalendarUtil;
 import br.edu.ifrn.suapi.ClienteSUAP;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 import lombok.EqualsAndHashCode;
@@ -61,7 +60,7 @@ public class Aluno implements Serializable {
 	private String urlFoto;
 	
 	@Column(name = "REGISTRO")
-	private Date registro;
+	private LocalDateTime registro;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CURSO_ID")
@@ -79,7 +78,7 @@ public class Aluno implements Serializable {
 
 	@PrePersist
 	private void prePersist() {
-		this.registro = CalendarUtil.now();
+		this.registro = LocalDateTime.now();
 	}
 
 	public Aluno(String nome, String matricula, String urlFoto, Curso curso) {

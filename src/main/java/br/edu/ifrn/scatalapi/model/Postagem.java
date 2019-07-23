@@ -1,8 +1,8 @@
 package br.edu.ifrn.scatalapi.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
-import br.edu.ifrn.scatalapi.util.CalendarUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,7 +50,7 @@ public class Postagem implements Serializable {
 	@Setter private String descricao;
 	
 	@Column(name = "REGISTRO")
-	private Date registro;
+	private LocalDateTime registro;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ALUNO_ID")
@@ -70,7 +69,7 @@ public class Postagem implements Serializable {
 
 	@PrePersist
 	public void prePersist() {
-		this.registro = CalendarUtil.now();
+		this.registro = LocalDateTime.now();
 	}
 
 	public Postagem(String titulo, String descricao) {
