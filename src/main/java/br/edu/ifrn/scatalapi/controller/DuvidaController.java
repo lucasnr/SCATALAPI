@@ -52,12 +52,9 @@ public class DuvidaController {
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteById(@PathVariable Integer id){
-		try {
-			repository.deleteById(id);			
-			return ResponseEntity.noContent().build();
-		} catch (Exception e) {			
-			throw new DuvidaComIdNaoEncontradaException();
-		}
+		Postagem duvida = findDuvidaOrThrowException(id);
+		repository.delete(duvida);			
+		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/search/{query}")

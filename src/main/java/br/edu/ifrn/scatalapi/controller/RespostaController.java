@@ -47,12 +47,9 @@ public class RespostaController {
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> deleteById(@PathVariable Integer id){
-		try {
-			repository.deleteById(id);
-			return ResponseEntity.noContent().build();
-		} catch (Exception e) {
-			throw new RespostaComIdNaoEncontradaException();
-		}
+		Postagem resposta = findRespostaOrThrowException(id);
+		repository.delete(resposta);
+		return ResponseEntity.noContent().build();
 	}
 	
 	private Postagem findRespostaOrThrowException(Integer id) throws RespostaComIdNaoEncontradaException {
