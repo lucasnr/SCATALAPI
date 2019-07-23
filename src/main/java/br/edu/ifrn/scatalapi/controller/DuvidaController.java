@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifrn.scatalapi.dto.DuvidaResponseDTO;
+import br.edu.ifrn.scatalapi.dto.DuvidaUpdateDTO;
 import br.edu.ifrn.scatalapi.exception.DuvidaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Postagem;
-import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.DuvidaUpdateDTO;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 
 @RestController

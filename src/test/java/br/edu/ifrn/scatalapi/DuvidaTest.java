@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.DuvidaUpdateDTO;
-import br.edu.ifrn.scatalapi.model.dto.RespostaRequestDTO;
-import br.edu.ifrn.scatalapi.model.dto.RespostaResponseDTO;
+import br.edu.ifrn.scatalapi.dto.DuvidaResponseDTO;
+import br.edu.ifrn.scatalapi.dto.DuvidaUpdateDTO;
+import br.edu.ifrn.scatalapi.dto.RespostaRequestDTO;
+import br.edu.ifrn.scatalapi.dto.RespostaResponseDTO;
 import br.edu.ifrn.scatalapi.restclient.Pagina;
 import br.edu.ifrn.scatalapi.restclient.Resposta;
 import br.edu.ifrn.scatalapi.restclient.RestClient;

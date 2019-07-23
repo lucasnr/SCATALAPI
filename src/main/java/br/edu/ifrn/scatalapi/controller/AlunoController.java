@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifrn.scatalapi.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
-import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 
 @RestController

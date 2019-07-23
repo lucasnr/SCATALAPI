@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifrn.scatalapi.dto.TutoriaDetalhadaResponseDTO;
+import br.edu.ifrn.scatalapi.dto.TutoriaResponseDTO;
+import br.edu.ifrn.scatalapi.dto.TutoriaUpdateDTO;
 import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Disciplina;
 import br.edu.ifrn.scatalapi.model.Tutoria;
-import br.edu.ifrn.scatalapi.model.dto.TutoriaDetalhadaResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.TutoriaResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.TutoriaUpdateDTO;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 
 @RestController

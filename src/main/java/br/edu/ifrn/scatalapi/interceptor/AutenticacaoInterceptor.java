@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.scatalapi.exception.TokenInvalidoException;
 import br.edu.ifrn.scatalapi.exception.TokenNaoInformadoException;
-import br.edu.ifrn.scatalapi.model.dto.TokenDTO;
 
 public class AutenticacaoInterceptor implements HandlerInterceptor {
 

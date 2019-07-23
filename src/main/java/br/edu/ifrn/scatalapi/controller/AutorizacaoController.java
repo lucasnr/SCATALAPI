@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.edu.ifrn.scatalapi.dto.CredenciaisDTO;
+import br.edu.ifrn.scatalapi.dto.TokenVerifyDTO;
 import br.edu.ifrn.scatalapi.model.Aluno;
-import br.edu.ifrn.scatalapi.model.dto.CredenciaisDTO;
-import br.edu.ifrn.scatalapi.model.dto.TokenDTO;
-import br.edu.ifrn.scatalapi.model.dto.TokenVerifyDTO;
+import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
@@ -30,11 +30,11 @@ public class AutorizacaoController {
 	private AlunoRepository alunoRepository;
 
 	@PostMapping
-	public ResponseEntity<TokenDTO> authenticate(@RequestBody @Valid CredenciaisDTO credenciais,
+	public ResponseEntity<Token> authenticate(@RequestBody @Valid CredenciaisDTO credenciais,
 			UriComponentsBuilder uriBuilder) throws FalhaAoConectarComSUAPException {
-		ResponseEntity<TokenDTO> resposta;
+		ResponseEntity<Token> resposta;
 
-		TokenDTO token = new TokenDTO(credenciais);
+		Token token = new Token(credenciais);
 		if (token.isValido()) {
 			Aluno alunoCriado = saveAlunoIfNotExists(token.asAluno());
 			if (alunoCriado != null) {
@@ -50,7 +50,7 @@ public class AutorizacaoController {
 
 	@PostMapping(value = "/verify")
 	public ResponseEntity<?> validate(@RequestBody TokenVerifyDTO token) throws FalhaAoConectarComSUAPException {
-		TokenDTO tokenDTO = new TokenDTO(token.getToken());
+		Token tokenDTO = new Token(token.getToken());
 		return ResponseEntity.ok(tokenDTO);
 	}
 

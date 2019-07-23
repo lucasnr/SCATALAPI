@@ -12,9 +12,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import br.edu.ifrn.scatalapi.model.dto.AlunoResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.DuvidaRequestDTO;
-import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
+import br.edu.ifrn.scatalapi.dto.AlunoResponseDTO;
+import br.edu.ifrn.scatalapi.dto.DuvidaRequestDTO;
+import br.edu.ifrn.scatalapi.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.restclient.Pagina;
 import br.edu.ifrn.scatalapi.restclient.Resposta;
 import br.edu.ifrn.scatalapi.restclient.RestClient;

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifrn.scatalapi.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Postagem;
-import br.edu.ifrn.scatalapi.model.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
 

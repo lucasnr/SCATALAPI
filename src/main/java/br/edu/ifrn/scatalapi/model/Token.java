@@ -1,7 +1,8 @@
-package br.edu.ifrn.scatalapi.model.dto;
+package br.edu.ifrn.scatalapi.model;
 
 import java.io.Serializable;
 
+import br.edu.ifrn.scatalapi.dto.CredenciaisDTO;
 import br.edu.ifrn.suapi.ClienteSUAP;
 import br.edu.ifrn.suapi.exception.CredenciaisIncorretasException;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
@@ -9,7 +10,7 @@ import br.edu.ifrn.suapi.exception.TokenInvalidoException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
 import lombok.Getter;
 
-public class TokenDTO implements Serializable {
+public class Token implements Serializable {
 
 	/**
 	 * 
@@ -21,7 +22,7 @@ public class TokenDTO implements Serializable {
 	
 	private transient ClienteSUAP clienteSUAP;
 	
-	public TokenDTO(CredenciaisDTO credenciais) throws FalhaAoConectarComSUAPException {
+	public Token(CredenciaisDTO credenciais) throws FalhaAoConectarComSUAPException {
 		String matricula = credenciais.getMatricula();
 		String senha = credenciais.getSenha();
 		
@@ -44,7 +45,7 @@ public class TokenDTO implements Serializable {
 		this.conteudo = conteudo;
 	}
 	
-	public TokenDTO(String token) throws FalhaAoConectarComSUAPException {
+	public Token(String token) throws FalhaAoConectarComSUAPException {
 		String conteudo = token;
 		boolean isValido = false;
 		

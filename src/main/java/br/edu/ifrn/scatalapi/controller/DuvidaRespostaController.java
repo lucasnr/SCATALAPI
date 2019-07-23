@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.edu.ifrn.scatalapi.dto.RespostaRequestDTO;
+import br.edu.ifrn.scatalapi.dto.RespostaResponseDTO;
 import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.DuvidaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.exception.FalhaAoSalvarNoBancoDeDadosException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Postagem;
-import br.edu.ifrn.scatalapi.model.dto.RespostaRequestDTO;
-import br.edu.ifrn.scatalapi.model.dto.RespostaResponseDTO;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 

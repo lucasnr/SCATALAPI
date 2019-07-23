@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import br.edu.ifrn.scatalapi.model.dto.MatriculaDTO;
-import br.edu.ifrn.scatalapi.model.dto.TutoriaDetalhadaResponseDTO;
-import br.edu.ifrn.scatalapi.model.dto.TutoriaTutoresUpdateDTO;
+import br.edu.ifrn.scatalapi.dto.MatriculaDTO;
+import br.edu.ifrn.scatalapi.dto.TutoriaDetalhadaResponseDTO;
+import br.edu.ifrn.scatalapi.dto.TutoriaTutoresUpdateDTO;
 import br.edu.ifrn.scatalapi.restclient.Resposta;
 import br.edu.ifrn.scatalapi.restclient.RestClient;
 
