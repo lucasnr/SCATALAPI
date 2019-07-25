@@ -19,15 +19,15 @@ import br.edu.ifrn.scatalapi.restclient.RestClient;
 
 public class DuvidaTest {
 
-	private RestClient client = new RestClient("http://localhost:8080/");
-
+	private final RestClient client = RestClientBuilder.newRestClient();
+	
 	@Test
 	public void atualizaDuvidaERespostaRetorna200() {
 		DuvidaUpdateDTO duvida = new DuvidaUpdateDTO();
 		duvida.setTitulo("Duvida do JUnit editada");
 		duvida.setDescricao("Testando a edição de uma dúvida vi JUnit");
 		
-		Resposta<DuvidaResponseDTO> resposta = client .doPatch("duvida/13", duvida, DuvidaResponseDTO.class);
+		Resposta<DuvidaResponseDTO> resposta = client.doPatch("duvida/13", duvida, DuvidaResponseDTO.class);
 		DuvidaResponseDTO duvidaResposta = resposta.getEntidade();
 		
 		assertEquals(200, resposta.getStatus());
@@ -77,7 +77,7 @@ public class DuvidaTest {
 		String location = (String) resposta.getHeaders().get("Location").get(0);
 		assertNotNull(location);
 		
-		int status = new RestClient(location).doDelete("").getStatus();
+		int status = new RestClient(location).addAuthorizationHeader(this.client.getAuth()).doDelete("").getStatus();
 		assertEquals(204, status);
 	}
 }

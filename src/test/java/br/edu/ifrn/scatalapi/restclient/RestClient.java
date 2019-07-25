@@ -25,6 +25,7 @@ import lombok.ToString;
 @ToString(exclude = {"client"})
 @EqualsAndHashCode
 public class RestClient {
+	
 	private static final String MEDIA_TYPE = MediaType.APPLICATION_JSON;
 
 	@Getter
@@ -38,61 +39,68 @@ public class RestClient {
 	@Getter
 	private final Map<String, Object> params = new HashMap<>();
 
+	@Getter
+	private String auth;
+
 	public RestClient(String target) {
 		this.TARGET = target;
+		initHeaders();
+	}
+
+	private void initHeaders() {
 		this.addHeader("Content-Type", MEDIA_TYPE);
 		this.addHeader("Accept", MEDIA_TYPE);
 	}	
 	
-	public Response doGet(String path) {
+	public final Response doGet(String path) {
 		return request(path).get();
 	}
 
-	public <T> Resposta<T> doGet(String path, Class<T> responseType) {
+	public final <T> Resposta<T> doGet(String path, Class<T> responseType) {
 		return new Resposta<T>(doGet(path), responseType);
 	}
 	
-	public <T> Resposta<T> doGet(String path, TypeReference<T> typeReference) {
+	public final <T> Resposta<T> doGet(String path, TypeReference<T> typeReference) {
 		return new Resposta<T>(doGet(path), typeReference);
 	}
 	
-	public <E> Response doPost(String path, E entity) {
+	public final <E> Response doPost(String path, E entity) {
 		return request(path).post(createEntity(entity));
 	}
 
-	public <T, E> Resposta<T> doPost(String path, E entity, Class<T> responseType) {
+	public final <T, E> Resposta<T> doPost(String path, E entity, Class<T> responseType) {
 		return new Resposta<T>(doPost(path, entity), responseType);
 	}
 	
-	public <T, E> Resposta<T> doPost(String path, E entity, TypeReference<T> typeReference) {
+	public final <T, E> Resposta<T> doPost(String path, E entity, TypeReference<T> typeReference) {
 		return new Resposta<T>(doPost(path, entity), typeReference);
 	}
 	
-	public <E> Response doPut(String path, E entity) {
+	public final <E> Response doPut(String path, E entity) {
 		return request(path).put(createEntity(entity));
 	}
 	
-	public <T, E> Resposta<T> doPut(String path, E entity, Class<T> responseType) {
+	public final <T, E> Resposta<T> doPut(String path, E entity, Class<T> responseType) {
 		return new Resposta<T>(doPut(path, entity), responseType);
 	}
 	
-	public <T, E> Resposta<T> doPut(String path, E entity, TypeReference<T> typeReference) {
+	public final <T, E> Resposta<T> doPut(String path, E entity, TypeReference<T> typeReference) {
 		return new Resposta<T>(doPut(path, entity), typeReference);
 	}
 	
-	public <E> Response doPatch(String path, E entity) {
+	public final <E> Response doPatch(String path, E entity) {
 		return request(path).method("PATCH", createEntity(entity));
 	}
 	
-	public <T, E> Resposta<T> doPatch(String path, E entity, Class<T> responseType) {
+	public final <T, E> Resposta<T> doPatch(String path, E entity, Class<T> responseType) {
 		return new Resposta<T>(doPatch(path, entity), responseType);
 	}
 	
-	public <T, E> Resposta<T> doPatch(String path, E entity, TypeReference<T> typeReference) {
+	public final <T, E> Resposta<T> doPatch(String path, E entity, TypeReference<T> typeReference) {
 		return new Resposta<T>(doPatch(path, entity), typeReference);
 	}
-	
-	public Response doDelete(String path) {
+	 
+	public final Response doDelete(String path) {
 		return request(path).delete();
 	}
 	
@@ -111,11 +119,17 @@ public class RestClient {
 		return Entity.entity(entity, MEDIA_TYPE);
 	}
 
-	public void addHeader(String name, String value) {
+	private final void addHeader(String name, String value) {
 		this.headers.putSingle(name, value);
 	}
 	
-	public RestClient addQueryParam(String name, Object value){
+	public final RestClient addAuthorizationHeader(String value) {
+		this.auth = value;
+		this.addHeader("Authorization", auth);
+		return this;
+	}
+	
+	public final RestClient addQueryParam(String name, Object value){
 		this.params.put(name, value);
 		return this;
 	}

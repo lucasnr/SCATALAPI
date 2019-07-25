@@ -21,7 +21,7 @@ import br.edu.ifrn.scatalapi.restclient.RestClient;
 
 public class AlunoTest {
 
-	private final RestClient client = new RestClient("http://localhost:8080/");
+	private RestClient client = RestClientBuilder.newRestClient();
 	
 	@Test
 	public void buscaAlunosEmPaginaDeTresEDescobreSeTemConteudo() throws JsonParseException, JsonMappingException, IOException {
@@ -68,7 +68,7 @@ public class AlunoTest {
 		assertNotNull(location);
 		assertNotNull(resposta.getEntidade());
 		
-		int status = new RestClient(location).doDelete("").getStatus();
+		int status = new RestClient(location).addAuthorizationHeader(this.client.getAuth()).doDelete("").getStatus();
 		assertEquals(204, status);
 	}
 	

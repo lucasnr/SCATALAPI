@@ -15,7 +15,7 @@ import br.edu.ifrn.scatalapi.restclient.RestClient;
 
 public class TutoriaTest {
 
-	private RestClient client = new RestClient("http://localhost:8080/");
+	private final RestClient client = RestClientBuilder.newRestClient();
 	
 	@Test
 	public void atualizaTutores() {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.edu.ifrn.scatalapi.dto.CredenciaisDTO;
-import br.edu.ifrn.scatalapi.dto.TokenVerifyDTO;
+import br.edu.ifrn.scatalapi.dto.TokenDTO;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
@@ -49,7 +49,7 @@ public class AutorizacaoController {
 	}
 
 	@PostMapping(value = "/verify")
-	public ResponseEntity<?> validate(@RequestBody TokenVerifyDTO token) throws FalhaAoConectarComSUAPException {
+	public ResponseEntity<?> validate(@RequestBody TokenDTO token) throws FalhaAoConectarComSUAPException {
 		Token tokenDTO = new Token(token.getToken());
 		return ResponseEntity.ok(tokenDTO);
 	}

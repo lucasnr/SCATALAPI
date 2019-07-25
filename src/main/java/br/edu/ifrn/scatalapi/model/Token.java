@@ -17,7 +17,7 @@ public class Token implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Getter private final String conteudo;
+	@Getter private final String token;
 	@Getter private transient final boolean valido;
 	
 	private transient ClienteSUAP clienteSUAP;
@@ -42,7 +42,7 @@ public class Token implements Serializable {
 		}
 		
 		this.valido = isValido;
-		this.conteudo = conteudo;
+		this.token = conteudo;
 	}
 	
 	public Token(String token) throws FalhaAoConectarComSUAPException {
@@ -61,7 +61,7 @@ public class Token implements Serializable {
 		}
 		
 		this.clienteSUAP = clienteSUAP;
-		this.conteudo = conteudo;
+		this.token = conteudo;
 		this.valido = isValido;
 	}
 
