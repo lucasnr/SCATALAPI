@@ -32,10 +32,15 @@ import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value = "/aluno/{id}/duvida", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
+@ApiResponses(@ApiResponse(code = 401, message = "Você não tem permissão para acessar esse recurso ou não informou o token de Autorização"))
 public class AlunoDuvidaController {
 
 	@Autowired
@@ -48,7 +53,12 @@ public class AlunoDuvidaController {
 	private TutoriaRepository tutoriaRepository;
 	
 	@GetMapping
-	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@PathVariable Integer id,
+	@ApiOperation(value = "Busca as dúvidas de um aluno por seu ID")
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "O aluno não possui nenhuma dúvida"), 
+			@ApiResponse(code = 404, message = "Não existe aluno com o ID informado")
+	})
+	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@ApiParam(required = true, name = "id1", value = "O ID do aluno a ser buscado") @PathVariable Integer id,
 			@PageableDefault(page = 0, size = 5, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 		if (! alunoRepository.existsById(id))
 			throw new AlunoComIdNaoEncontradoException();
@@ -62,10 +72,16 @@ public class AlunoDuvidaController {
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	public ResponseEntity<DuvidaResponseDTO> post(@RequestBody @Valid DuvidaRequestDTO duvida, 
-			@PathVariable("id") Integer alunoId, UriComponentsBuilder uriBuilder) {
+	@ApiOperation(value = "Cria uma dúvida para o aluno por seu ID")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Dúvida criada com sucesso"),
+			@ApiResponse(code = 400, message = "Os dados informados no corpo da requisição não são válidos"),
+			@ApiResponse(code = 404, message = "Não existe aluno ou tutoria com os respectivos IDs informados"),
+	})
+	public ResponseEntity<DuvidaResponseDTO> post(@ApiParam(required = true, name = "id2", value = "O ID do aluno a ser buscado") @PathVariable Integer id,
+			@RequestBody @Valid DuvidaRequestDTO duvida, UriComponentsBuilder uriBuilder) {
 		
-		Postagem postagem = buildDuvida(alunoId, duvida);
+		Postagem postagem = buildDuvida(id, duvida);
 		boolean salvou = duvidaRepository.save(postagem) != null;
 		if (salvou) {
 			DuvidaResponseDTO duvidaDTO = new DuvidaResponseDTO(postagem);
@@ -77,7 +93,6 @@ public class AlunoDuvidaController {
 		throw new FalhaAoSalvarNoBancoDeDadosException();
 	}
 
-	
 	private Postagem buildDuvida(Integer alunoId, DuvidaRequestDTO duvida) {
 		Aluno criador = findAlunoOrThrowException(alunoId);
 		Tutoria tutoria = findTutoriaOrThrowException(duvida.getIdDaTutoria());
