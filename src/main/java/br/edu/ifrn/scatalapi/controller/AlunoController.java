@@ -19,6 +19,7 @@ import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -27,6 +28,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping(value = "/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
+@Api(tags = {"aluno"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com os alunos")
 @ApiResponses(@ApiResponse(code = 401, message = "Você não tem permissão para acessar esse recurso ou não informou o token de Autorização"))
 public class AlunoController {
 

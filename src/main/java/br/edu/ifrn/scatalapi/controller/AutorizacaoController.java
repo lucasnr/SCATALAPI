@@ -21,15 +21,26 @@ import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.suapi.exception.FalhaAoConectarComSUAPException;
 import br.edu.ifrn.suapi.model.AlunoSUAP;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value="/auth", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@Api(tags = {"auth"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações de autenticação")
 public class AutorizacaoController {
 
 	@Autowired
 	private AlunoRepository alunoRepository;
 
 	@PostMapping
+	@ApiOperation(value = "Obtem o token do SUAP para o aluno com as credenciais informadas", response = Token.class)
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Recupera com sucesso o token do aluno"), 
+			@ApiResponse(code = 201, message = "Recupera com sucesso o token do aluno e salva esse aluno no banco de dados"), 
+			@ApiResponse(code = 400, message = "As credenciais informadas não são válidas"),
+			@ApiResponse(code = 500, message = "Ocorreu um erro ao se comunicar com o SUAP")})
 	public ResponseEntity<Token> authenticate(@RequestBody @Valid CredenciaisDTO credenciais,
 			UriComponentsBuilder uriBuilder) throws FalhaAoConectarComSUAPException {
 		ResponseEntity<Token> resposta;
@@ -49,7 +60,11 @@ public class AutorizacaoController {
 	}
 
 	@PostMapping(value = "/verify")
-	public ResponseEntity<?> validate(@RequestBody TokenDTO token) throws FalhaAoConectarComSUAPException {
+	@ApiOperation(value = "Valida um token informado", response = Token.class)
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "O token informado foi validado com sucesso"), 
+			@ApiResponse(code = 500, message = "Ocorreu um erro ao se comunicar com o SUAP")})
+	public ResponseEntity<Token> validate(@RequestBody TokenDTO token) throws FalhaAoConectarComSUAPException {
 		Token tokenDTO = new Token(token.getToken());
 		return ResponseEntity.ok(tokenDTO);
 	}

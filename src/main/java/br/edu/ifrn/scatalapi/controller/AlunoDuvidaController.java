@@ -32,6 +32,7 @@ import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -40,6 +41,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping(value = "/aluno/{id}/duvida", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
+@Api(tags = {"aluno-duvida"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com as duvidas de um aluno")
 @ApiResponses(@ApiResponse(code = 401, message = "Você não tem permissão para acessar esse recurso ou não informou o token de Autorização"))
 public class AlunoDuvidaController {
 

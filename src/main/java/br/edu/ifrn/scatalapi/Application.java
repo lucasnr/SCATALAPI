@@ -1,5 +1,7 @@
 package br.edu.ifrn.scatalapi;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -9,8 +11,13 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 import br.edu.ifrn.scatalapi.controller.TutoriaController;
 import br.edu.ifrn.scatalapi.interceptor.AutenticacaoInterceptor;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -32,6 +39,31 @@ public class Application {
     			.select()
     			.apis(RequestHandlerSelectors.basePackage("br.edu.ifrn.scatalapi.controller"))
     			.paths(PathSelectors.ant("/**"))
-    			.build();
+    			.build()
+    			.apiInfo(info())
+    			.globalOperationParameters(
+					Arrays.asList(
+    					new ParameterBuilder()
+			                .name("Authorization")
+			                .description("Header de Autorização")
+			                .modelRef(new ModelRef("string"))
+			                .parameterType("header")
+			                .required(false)
+			                .build()
+	                )
+				);
     }
+    
+    private ApiInfo info() {
+		return new ApiInfoBuilder()
+			.title("SCATAL Spring Boot RESTful API")
+			.description("Spring Boot RESTful API para o Sistema de Comunicação Aluno-Tutor de Aprendizagem e Laboratório")
+			.version("1.0")
+			.termsOfServiceUrl("Terms of Service")
+			.contact(new Contact("Lucas do Nascimento", "https://lucasnr.github.io/", "lucasnascimentoribeiro13@gmail.com"))
+			.license("Apache License Version 2.0")
+			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
+			.build();
+    }
+    
 }
