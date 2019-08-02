@@ -25,10 +25,16 @@ import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Disciplina;
 import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value = "/tutoria", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
+@Api(tags = {"tutoria"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com as tutorias")
 public class TutoriaController {
 
 	@Autowired
@@ -36,15 +42,19 @@ public class TutoriaController {
 
 	@GetMapping
 	@Cacheable(value = "tutorias")
+	@ApiOperation(value = "Busca todos as tutorias", response = List.class)
+	@ApiResponses(value = {@ApiResponse(code = 200, message = "Recupera as tutorias com sucesso")}) 
 	public List<TutoriaResponseDTO> findAll() {
-		List<TutoriaResponseDTO> tutorias = repository.findAll()
-				.stream().map(TutoriaResponseDTO::new).collect(Collectors.toList());
-		return tutorias;
+		return repository.findAll().stream().map(TutoriaResponseDTO::new).collect(Collectors.toList());
 	}
 
 	@GetMapping("/{id}")
 	@Cacheable(value = "tutoria")
-	public TutoriaDetalhadaResponseDTO findById(@PathVariable Integer id) {
+	@ApiOperation(value = "Busca uma tutoria por seu ID", response = TutoriaDetalhadaResponseDTO.class)
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Recupera a tutoria com sucesso"), 
+			@ApiResponse(code = 404, message = "Não existe tutoria com o ID informado")})
+	public TutoriaDetalhadaResponseDTO findById(@ApiParam(required = true, name = "id", value = "O ID da tutoria") @PathVariable Integer id) {
 		Tutoria tutoria = findTutoriaOrThrowException(id);
 		return new TutoriaDetalhadaResponseDTO(tutoria);
 	}
@@ -52,7 +62,13 @@ public class TutoriaController {
 	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
 	@CacheEvict(value = {"tutorias", "tutoria"}, allEntries = true)
-	public TutoriaDetalhadaResponseDTO uptadeById(@PathVariable Integer id, @RequestBody @Valid TutoriaUpdateDTO tutoriaDTO) {
+	@ApiOperation(value = "Atualiza o nome e nome usual da tutoria por seu ID", response = TutoriaDetalhadaResponseDTO.class)
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Atualiza o nome e nome usual da tutoria com sucesso"), 
+			@ApiResponse(code = 400, message = "Os dados informados não são válidos"), 
+			@ApiResponse(code = 404, message = "Não existe tutoria com o ID informado")})
+	public TutoriaDetalhadaResponseDTO uptadeById(@ApiParam(required = true, name = "id", value = "O ID da tutoria") @PathVariable Integer id, 
+			@RequestBody @Valid TutoriaUpdateDTO tutoriaDTO) {
 		Tutoria tutoria = findTutoriaOrThrowException(id);
 		Disciplina disciplina = tutoria.getDisciplina();
 		disciplina.setNome(tutoriaDTO.getNome());

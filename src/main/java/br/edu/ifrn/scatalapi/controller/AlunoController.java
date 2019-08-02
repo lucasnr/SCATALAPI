@@ -19,17 +19,18 @@ import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
+import br.edu.ifrn.scatalapi.swaggerutil.ApiPageable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = "/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
 @Api(tags = {"aluno"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com os alunos")
-@ApiResponses(@ApiResponse(code = 401, message = "Você não tem permissão para acessar esse recurso ou não informou o token de Autorização"))
 public class AlunoController {
 
 	@Autowired
@@ -37,9 +38,12 @@ public class AlunoController {
 
 	@GetMapping
 	@ApiOperation(value = "Busca todos os alunos", response = Page.class)
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Recupera os alunos com sucesso") })
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Recupera os alunos com sucesso"), 
+			@ApiResponse(code = 204, message = "Não existem alunos cadastrados")})
+	@ApiPageable
 	public ResponseEntity<Page<AlunoResponseDTO>> findAll(
-			@PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
+			@ApiIgnore @PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 
 		Page<Aluno> alunos = repository.findAll(paginacao);
 		if (alunos.isEmpty())

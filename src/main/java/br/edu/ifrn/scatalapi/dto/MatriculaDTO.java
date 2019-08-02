@@ -21,5 +21,5 @@ public class MatriculaDTO implements Serializable {
 
 	@NotNull(message = "A matrícula é obrigatória")
 	@NotEmpty(message = "A matrícula não pode ser vazia")
-	private String valor;
+	private String matricula;
 }

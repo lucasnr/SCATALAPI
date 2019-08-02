@@ -5,8 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+
+@ApiResponses(@ApiResponse(code = 401, message = "Você não tem permissão para acessar esse recurso ou não informou o token de Autorização"))
 public @interface AutenticadoRequired {
 
 }
