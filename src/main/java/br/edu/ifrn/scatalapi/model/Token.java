@@ -18,51 +18,17 @@ public class Token implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Getter private final String token;
-	@Getter private transient final boolean valido;
 	
 	private transient ClienteSUAP clienteSUAP;
 	
-	public Token(CredenciaisDTO credenciais) throws FalhaAoConectarComSUAPException {
-		String matricula = credenciais.getMatricula();
-		String senha = credenciais.getSenha();
-		
-		String conteudo = null;
-		boolean isValido = false;
-
-		try {
-			ClienteSUAP cliente = new ClienteSUAP(matricula, senha);
-			conteudo = cliente.getTOKEN();
-			isValido = true;
-			this.clienteSUAP = cliente;
-		} catch (CredenciaisIncorretasException e) {
-			conteudo = e.getMessage();
-		} catch (FalhaAoConectarComSUAPException e) {
-			conteudo = e.getMessage();
-			throw e;
-		}
-		
-		this.valido = isValido;
-		this.token = conteudo;
+	public Token(CredenciaisDTO credenciais) throws FalhaAoConectarComSUAPException, CredenciaisIncorretasException {
+		this.clienteSUAP = new ClienteSUAP(credenciais.getMatricula(), credenciais.getSenha());
+		this.token = clienteSUAP.getTOKEN();
 	}
 	
-	public Token(String token) throws FalhaAoConectarComSUAPException {
-		String conteudo = token;
-		boolean isValido = false;
-		
-		ClienteSUAP clienteSUAP = null;
-		try {
-			clienteSUAP = new ClienteSUAP(token);
-			isValido = true;
-		} catch (TokenInvalidoException e) {
-			conteudo = e.getMessage();
-		} catch (FalhaAoConectarComSUAPException e) {
-			conteudo = e.getMessage();
-			throw e;
-		}
-		
-		this.clienteSUAP = clienteSUAP;
-		this.token = conteudo;
-		this.valido = isValido;
+	public Token(String token) throws FalhaAoConectarComSUAPException, TokenInvalidoException {
+		this.clienteSUAP = new ClienteSUAP(token);
+		this.token = clienteSUAP.getTOKEN();
 	}
 
 	public AlunoSUAP asAluno() {
