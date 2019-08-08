@@ -26,7 +26,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSpringDataWebSupport
 @EnableCaching
 @EnableSwagger2
-@ComponentScan(basePackageClasses = {TutoriaController.class, AutenticacaoInterceptor.class})
+@ComponentScan(basePackageClasses = {TutoriaController.class, AutenticacaoInterceptor.class, WebCorsConfig.class})
 public class Application {
 	
     public static void main(String[] args) {
