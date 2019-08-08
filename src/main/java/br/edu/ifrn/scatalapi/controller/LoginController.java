@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifrn.scatalapi.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.dto.CredenciaisDTO;
 import br.edu.ifrn.scatalapi.dto.TokenDTO;
+import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Token;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
@@ -32,6 +33,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = "/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
+@AutenticadoRequired
 @Api(tags = {"login"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com o login dos alunos")
 public class LoginController {
 	

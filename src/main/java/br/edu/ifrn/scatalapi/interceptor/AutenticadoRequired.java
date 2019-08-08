@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiResponses;
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 
-@ApiResponses(@ApiResponse(code = 401, message = "Você não tem permissão para acessar esse recurso ou não informou o token de Autorização"))
+@ApiResponses(@ApiResponse(code = 401, message = "O header 'Authorization' não foi informado ou não é válido"))
 public @interface AutenticadoRequired {
 
 }
