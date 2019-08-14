@@ -24,7 +24,6 @@ import br.edu.ifrn.scatalapi.dto.RespostaRequestDTO;
 import br.edu.ifrn.scatalapi.dto.RespostaResponseDTO;
 import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.DuvidaComIdNaoEncontradaException;
-import br.edu.ifrn.scatalapi.exception.FalhaAoSalvarNoBancoDeDadosException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.model.Postagem;
@@ -77,10 +76,7 @@ public class DuvidaRespostaController {
 	public ResponseEntity<RespostaResponseDTO> postResposta(@ApiParam(required = true, name = "id", value = "O ID da dúvida") @PathVariable Integer id, 
 			@RequestBody @Valid RespostaRequestDTO resposta, UriComponentsBuilder uriBuilder){
 		Postagem postagem = buildResposta(id, resposta);
-		
-		Postagem salvo = postagemRepository.save(postagem);
-		if (salvo == null)
-			throw new FalhaAoSalvarNoBancoDeDadosException();
+		postagemRepository.save(postagem);
 		
 		RespostaResponseDTO responseDTO = new RespostaResponseDTO(postagem);
 		URI location = uriBuilder.path("/resposta/{id}").buildAndExpand(responseDTO.getId()).toUri();

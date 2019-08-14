@@ -23,7 +23,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.edu.ifrn.scatalapi.dto.DuvidaRequestDTO;
 import br.edu.ifrn.scatalapi.dto.DuvidaResponseDTO;
 import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
-import br.edu.ifrn.scatalapi.exception.FalhaAoSalvarNoBancoDeDadosException;
 import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
@@ -86,15 +85,12 @@ public class AlunoDuvidaController {
 			@RequestBody @Valid DuvidaRequestDTO duvida, UriComponentsBuilder uriBuilder) {
 		
 		Postagem postagem = buildDuvida(id, duvida);
-		boolean salvou = duvidaRepository.save(postagem) != null;
-		if (salvou) {
-			DuvidaResponseDTO duvidaDTO = new DuvidaResponseDTO(postagem);
-			URI location = uriBuilder.path("/duvida/{id}")
-					.buildAndExpand(duvidaDTO.getId()).toUri();
-			return ResponseEntity.created(location).body(duvidaDTO);
-		} 
+		duvidaRepository.save(postagem);
+		DuvidaResponseDTO duvidaDTO = new DuvidaResponseDTO(postagem);
+		URI location = uriBuilder.path("/duvida/{id}")
+				.buildAndExpand(duvidaDTO.getId()).toUri();
+		return ResponseEntity.created(location).body(duvidaDTO);
 		
-		throw new FalhaAoSalvarNoBancoDeDadosException();
 	}
 
 	private Postagem buildDuvida(Integer alunoId, DuvidaRequestDTO duvida) {

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
-import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
+import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontradoException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
@@ -72,7 +72,7 @@ public class AlunoController {
 			@ApiResponse(code = 404, message = "Não existe aluno com a matrícula informada") 
 	})
 	public AlunoResponseDTO findByMatricula(@ApiParam(required = true, name = "matricula", value = "A matrícula do aluno a ser buscado") @PathVariable String matricula) {
-		Aluno aluno = repository.findByMatricula(matricula).orElseThrow(AlunoComMatriculaNaoEncontrado::new);
+		Aluno aluno = repository.findByMatricula(matricula).orElseThrow(AlunoComMatriculaNaoEncontradoException::new);
 		return new AlunoResponseDTO(aluno);
 	}
 

@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
+import br.edu.ifrn.scatalapi.advice.GlobalExceptionHandler;
+import br.edu.ifrn.scatalapi.config.WebCorsConfig;
 import br.edu.ifrn.scatalapi.controller.TutoriaController;
 import br.edu.ifrn.scatalapi.interceptor.AutenticacaoInterceptor;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -26,7 +28,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSpringDataWebSupport
 @EnableCaching
 @EnableSwagger2
-@ComponentScan(basePackageClasses = {TutoriaController.class, AutenticacaoInterceptor.class, WebCorsConfig.class})
+@ComponentScan(basePackageClasses = {TutoriaController.class, AutenticacaoInterceptor.class, WebCorsConfig.class, GlobalExceptionHandler.class})
 public class Application {
 	
     public static void main(String[] args) {

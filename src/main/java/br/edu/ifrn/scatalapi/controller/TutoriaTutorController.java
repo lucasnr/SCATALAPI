@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifrn.scatalapi.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.dto.TutoriaDetalhadaResponseDTO;
 import br.edu.ifrn.scatalapi.dto.TutoriaTutoresUpdateDTO;
-import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontrado;
+import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.TutoriaComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
@@ -84,7 +84,7 @@ public class TutoriaTutorController {
 			tutoria.setTutores(tutores);
 			return ResponseEntity.ok(new TutoriaDetalhadaResponseDTO(tutoria));
 		} catch (Exception e) {
-			throw new AlunoComMatriculaNaoEncontrado();
+			throw new AlunoComMatriculaNaoEncontradoException();
 		}
 	}
 	
