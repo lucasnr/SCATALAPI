@@ -57,7 +57,7 @@ public class Aluno implements Serializable {
 	private String matricula;
 	
 	@Column(name = "URL_FOTO")
-	private String urlFoto;
+	@Setter private String urlFoto;
 	
 	@Column(name = "REGISTRO")
 	private LocalDateTime registro;

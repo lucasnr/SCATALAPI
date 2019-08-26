@@ -4,8 +4,10 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifrn.scatalapi.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.dto.CredenciaisDTO;
+import br.edu.ifrn.scatalapi.dto.FotoDTO;
 import br.edu.ifrn.scatalapi.dto.TokenDTO;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
@@ -48,6 +51,7 @@ public class LoginController {
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
+	@Cacheable(value = "aluno-login")
 	@ApiOperation(value = "Faz login de um aluno usando suas credenciais com o SUAP e retorna o seu token", response = AlunoResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera o token do aluno com sucesso"),
@@ -60,14 +64,32 @@ public class LoginController {
 	}
 	
 	@GetMapping("/meus-dados")
-	@ApiOperation(value = "Retorna os dados do aluno a partir do Header 'Token'", response = AlunoResponseDTO.class)
+	@Cacheable(value = "aluno-logado")
+	@ApiOperation(value = "Retorna os dados do aluno a partir do Header 'X-AUTH-TOKEN'", response = AlunoResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera os dados do aluno com sucesso"),
 			@ApiResponse(code = 400, message = "O token não foi informado ou não é válido") 
 	})
-	public AlunoResponseDTO findByToken(@ApiIgnore @RequestHeader(required = true, value = "Token") String tokenHeader) throws FalhaAoConectarComSUAPException, TokenInvalidoException {
+	public AlunoResponseDTO findByToken(@ApiIgnore @RequestHeader(required = true, value = "X-AUTH-TOKEN") String tokenHeader) 
+			throws FalhaAoConectarComSUAPException, TokenInvalidoException {
+		
+		return new AlunoResponseDTO(findByTokenOrThrowException(tokenHeader));
+	}
+
+	@PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Transactional
+	public AlunoResponseDTO updateFoto(@RequestHeader(required = true, value = "X-AUTH-TOKEN") String tokenHeader, @Valid @RequestBody FotoDTO novaFoto) 
+			throws FalhaAoConectarComSUAPException, TokenInvalidoException {
+		
+		Aluno aluno = findByTokenOrThrowException(tokenHeader);
+		aluno.setUrlFoto(novaFoto.getUrlFoto());
+		return new AlunoResponseDTO(aluno);
+	}
+	
+	
+	private Aluno findByTokenOrThrowException(String tokenHeader) throws FalhaAoConectarComSUAPException, TokenInvalidoException {
 		Token token = new Token(tokenHeader);
-		return new AlunoResponseDTO(alunoRepository.findByMatricula(token.asAluno().getMatricula()).get());
+		return alunoRepository.findByMatricula(token.asAluno().getMatricula()).get();
 	}
 	
 	private void saveAlunoIfNotExists(AlunoSUAP aluno) {
