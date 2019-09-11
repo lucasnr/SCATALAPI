@@ -13,6 +13,8 @@ import br.edu.ifrn.scatalapi.advice.GlobalExceptionHandler;
 import br.edu.ifrn.scatalapi.config.WebCorsConfig;
 import br.edu.ifrn.scatalapi.controller.TutoriaController;
 import br.edu.ifrn.scatalapi.interceptor.AutenticacaoInterceptor;
+import br.edu.ifrn.scatalapi.services.storage.GoogleDriveStorageService;
+import br.edu.ifrn.scatalapi.services.storage.StorageService;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -33,6 +35,11 @@ public class Application {
 	
     public static void main(String[] args) {
     	SpringApplication.run(Application.class, args);
+    }
+
+    @Bean
+    public StorageService storageService() {
+    	return new GoogleDriveStorageService();
     }
     
     @Bean
@@ -67,5 +74,4 @@ public class Application {
 			.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
 			.build();
     }
-    
 }
