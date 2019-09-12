@@ -26,17 +26,7 @@ import com.google.api.services.drive.model.File;
 public class GoogleDriveStorageService implements StorageService {
 
 	@Override
-	public String getLinkById(String id) {
-		try {
-			return getLinkFromDriveById(id);
-		} catch (IOException | GeneralSecurityException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public String upload(Imagem imagem) {
+	public String store(Imagem imagem) {
 		try {
 			String link = uploadImage(imagem);
 			return link;
@@ -73,20 +63,14 @@ public class GoogleDriveStorageService implements StorageService {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    private static String getLinkFromDriveById(String id) throws IOException, GeneralSecurityException {
-        // Build a new authorized API client service.
-        Drive service = getService();
-        File file = service.files().get(id).setFields("id, webContentLink").execute();
-        return file.getWebContentLink();
-    }
-    
+
     private static Drive getService() throws GeneralSecurityException, IOException {
     	final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();		
 	}
-
+    
 	private static String uploadImage(Imagem imagem) throws IOException, GeneralSecurityException {
 		final String imageFolderId = "1dArf-8BT_7l8C9bq4CjccNFH-2n5S5yp";
     	

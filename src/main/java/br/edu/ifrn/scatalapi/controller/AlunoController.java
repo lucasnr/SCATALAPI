@@ -17,8 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -94,13 +94,10 @@ public class AlunoController {
 	
 	@PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@Transactional
-	@CacheEvict(allEntries = false, value = {"alunoByMatricula", "aluno", "alunos"})
-	public AlunoComFotoResponseDTO updateFoto(@RequestBody MultipartFile file, @PathVariable("id") Integer id, HttpServletRequest req) throws IOException {
-		System.out.println(file == null);
+	@CacheEvict(allEntries = true, value = {"alunoByMatricula", "aluno", "alunos"})
+	public AlunoComFotoResponseDTO updateFoto(@RequestParam("file") MultipartFile file, @PathVariable("id") Integer id, HttpServletRequest req) throws IOException {
 		Aluno aluno = findByIdOrThrowException(id);
-		if(file == null)
-			return new AlunoComFotoResponseDTO(aluno);
-		String url = storageService.upload(Imagem.from(file));
+		String url = storageService.store(Imagem.from(file));
 		aluno.setUrlFoto(url);
 		return new AlunoComFotoResponseDTO(aluno);
 	}

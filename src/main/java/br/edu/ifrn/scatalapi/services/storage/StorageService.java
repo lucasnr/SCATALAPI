@@ -5,7 +5,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface StorageService {
 
-	public String getLinkById(String id);
-
-	public String upload(Imagem imagem);
+	public String store(Imagem imagem);
 }
