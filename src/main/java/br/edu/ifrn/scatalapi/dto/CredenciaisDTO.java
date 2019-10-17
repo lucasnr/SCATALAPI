@@ -23,7 +23,7 @@ public class CredenciaisDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull(message = "A matrícula é obrigatória")
-	@Length(max = 14, message = "A matrícula não pode conter mais de 14 caracteres")
+	@Length(max = 14, min = 14, message = "A matrícula deve conter 14 caracteres")
 	@NumberFormat
 	private String matricula;
 
