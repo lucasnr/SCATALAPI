@@ -31,7 +31,7 @@ import br.edu.ifrn.scatalapi.model.Tutoria;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
 import br.edu.ifrn.scatalapi.repository.TutoriaRepository;
-import br.edu.ifrn.scatalapi.swaggerutil.ApiPageable;
+import br.edu.ifrn.scatalapi.util.ApiPageable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

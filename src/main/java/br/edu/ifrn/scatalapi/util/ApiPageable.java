@@ -1,4 +1,4 @@
-package br.edu.ifrn.scatalapi.swaggerutil;
+package br.edu.ifrn.scatalapi.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -24,7 +24,7 @@ import br.edu.ifrn.scatalapi.exception.DuvidaComIdNaoEncontradaException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Postagem;
 import br.edu.ifrn.scatalapi.repository.PostagemRepository;
-import br.edu.ifrn.scatalapi.swaggerutil.ApiPageable;
+import br.edu.ifrn.scatalapi.util.ApiPageable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

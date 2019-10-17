@@ -26,12 +26,14 @@ import br.edu.ifrn.scatalapi.dto.AlunoComFotoResponseDTO;
 import br.edu.ifrn.scatalapi.dto.AlunoResponseDTO;
 import br.edu.ifrn.scatalapi.exception.AlunoComIdNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontradoException;
+import br.edu.ifrn.scatalapi.exception.FileException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.repository.AlunoRepository;
 import br.edu.ifrn.scatalapi.services.storage.Imagem;
 import br.edu.ifrn.scatalapi.services.storage.StorageService;
-import br.edu.ifrn.scatalapi.swaggerutil.ApiPageable;
+import br.edu.ifrn.scatalapi.util.ApiPageable;
+import br.edu.ifrn.scatalapi.util.FileTypeValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -97,9 +99,21 @@ public class AlunoController {
 	@CacheEvict(allEntries = true, value = {"alunoByMatricula", "aluno", "alunos"})
 	public AlunoComFotoResponseDTO updateFoto(@RequestParam("file") MultipartFile file, @PathVariable("id") Integer id, HttpServletRequest req) throws IOException {
 		Aluno aluno = findByIdOrThrowException(id);
-		String url = storageService.store(Imagem.from(file));
+		Imagem imagem = validFileOrThrowException(file);
+		String url = storageService.store(imagem);
 		aluno.setUrlFoto(url);
 		return new AlunoComFotoResponseDTO(aluno);
+	}
+
+	private Imagem validFileOrThrowException(MultipartFile file) throws IOException {
+		if(file == null)
+			throw new FileException("O envio do arquivo é obrigatorio");
+		
+		boolean fileTypeValid = new FileTypeValidator().valid(file);
+		if(! fileTypeValid)
+			throw new FileException("O tipo do arquivo não é válido");
+		
+		return Imagem.from(file);
 	}
 
 	private Aluno findByIdOrThrowException(Integer id) {
