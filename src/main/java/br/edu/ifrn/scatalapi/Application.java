@@ -11,8 +11,9 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 import br.edu.ifrn.scatalapi.advice.GlobalExceptionHandler;
 import br.edu.ifrn.scatalapi.config.WebCorsConfig;
-import br.edu.ifrn.scatalapi.controller.TutoriaController;
+import br.edu.ifrn.scatalapi.controller.AlunoController;
 import br.edu.ifrn.scatalapi.interceptor.AutenticacaoInterceptor;
+import br.edu.ifrn.scatalapi.service.impl.AlunoServiceImpl;
 import br.edu.ifrn.scatalapi.services.storage.GoogleDriveStorageService;
 import br.edu.ifrn.scatalapi.services.storage.StorageService;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -30,7 +31,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSpringDataWebSupport
 @EnableCaching
 @EnableSwagger2
-@ComponentScan(basePackageClasses = {TutoriaController.class, AutenticacaoInterceptor.class, WebCorsConfig.class, GlobalExceptionHandler.class})
+@ComponentScan(basePackageClasses = {AlunoController.class, AlunoServiceImpl.class, AutenticacaoInterceptor.class, WebCorsConfig.class, GlobalExceptionHandler.class})
 public class Application {
 	
     public static void main(String[] args) {

@@ -29,7 +29,7 @@ import br.edu.ifrn.scatalapi.exception.AlunoComMatriculaNaoEncontradoException;
 import br.edu.ifrn.scatalapi.exception.FileException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
-import br.edu.ifrn.scatalapi.repository.AlunoRepository;
+import br.edu.ifrn.scatalapi.service.AlunoService;
 import br.edu.ifrn.scatalapi.services.storage.Imagem;
 import br.edu.ifrn.scatalapi.services.storage.StorageService;
 import br.edu.ifrn.scatalapi.util.ApiPageable;
@@ -48,7 +48,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class AlunoController {
 
 	@Autowired
-	private AlunoRepository repository;
+	private AlunoService service;
 
 	@GetMapping
 	@Cacheable(value = "alunos")
@@ -60,7 +60,7 @@ public class AlunoController {
 	public ResponseEntity<Page<AlunoResponseDTO>> findAll(
 			@ApiIgnore @PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 
-		Page<Aluno> alunos = repository.findAll(paginacao);
+		Page<Aluno> alunos = service.findAll(paginacao);
 		if (alunos.isEmpty())
 			return ResponseEntity.noContent().build();
 
@@ -87,7 +87,7 @@ public class AlunoController {
 			@ApiResponse(code = 404, message = "Não existe aluno com a matrícula informada") 
 	})
 	public AlunoResponseDTO findByMatricula(@ApiParam(required = true, name = "matricula", value = "A matrícula do aluno a ser buscado") @PathVariable String matricula) {
-		Aluno aluno = repository.findByMatricula(matricula).orElseThrow(AlunoComMatriculaNaoEncontradoException::new);
+		Aluno aluno = service.findByMatricula(matricula).orElseThrow(AlunoComMatriculaNaoEncontradoException::new);
 		return new AlunoResponseDTO(aluno);
 	}
 	
@@ -117,6 +117,6 @@ public class AlunoController {
 	}
 
 	private Aluno findByIdOrThrowException(Integer id) {
-		return repository.findById(id).orElseThrow(AlunoComIdNaoEncontradoException::new);
+		return service.findById(id).orElseThrow(AlunoComIdNaoEncontradoException::new);
 	}
 }
