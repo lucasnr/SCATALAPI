@@ -2,11 +2,16 @@ package br.edu.ifrn.scatalapi;
 
 import java.util.Arrays;
 
+import br.edu.ifrn.scatalapi.model.Aluno;
+import br.edu.ifrn.scatalapi.repository.AlunoRepository;
+import br.edu.ifrn.scatalapi.service.impl.GoogleCloudStorageService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 import br.edu.ifrn.scatalapi.advice.GlobalExceptionHandler;
@@ -14,8 +19,7 @@ import br.edu.ifrn.scatalapi.config.WebCorsConfig;
 import br.edu.ifrn.scatalapi.controller.AlunoController;
 import br.edu.ifrn.scatalapi.interceptor.AutenticacaoInterceptor;
 import br.edu.ifrn.scatalapi.service.impl.AlunoServiceImpl;
-import br.edu.ifrn.scatalapi.services.storage.GoogleDriveStorageService;
-import br.edu.ifrn.scatalapi.services.storage.StorageService;
+import br.edu.ifrn.scatalapi.service.StorageService;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -32,6 +36,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableCaching
 @EnableSwagger2
 @ComponentScan(basePackageClasses = {AlunoController.class, AlunoServiceImpl.class, AutenticacaoInterceptor.class, WebCorsConfig.class, GlobalExceptionHandler.class})
+@EntityScan(basePackageClasses = {Aluno.class})
+@EnableJpaRepositories(basePackageClasses = {AlunoRepository.class})
 public class Application {
 	
     public static void main(String[] args) {
@@ -40,7 +46,7 @@ public class Application {
 
     @Bean
     public StorageService storageService() {
-    	return new GoogleDriveStorageService();
+    	return new GoogleCloudStorageService();
     }
     
     @Bean
@@ -55,7 +61,7 @@ public class Application {
 					Arrays.asList(
     					new ParameterBuilder()
 			                .name("Authorization")
-			                .description("Header de Autorização")
+			                .description("Header de AutorizaÃ§Ã£o")
 			                .modelRef(new ModelRef("string"))
 			                .parameterType("header")
 			                .required(false)
@@ -67,7 +73,7 @@ public class Application {
     private ApiInfo info() {
 		return new ApiInfoBuilder()
 			.title("SCATAL Spring Boot RESTful API")
-			.description("Spring Boot RESTful API para o Sistema de Comunicação Aluno-Tutor de Aprendizagem e Laboratório")
+			.description("Spring Boot RESTful API para o Sistema de ComunicaÃ§Ã£o Aluno-Tutor de Aprendizagem e LaboratÃ³rio")
 			.version("1.0")
 			.termsOfServiceUrl("Terms of Service")
 			.contact(new Contact("Lucas do Nascimento", "https://lucasnr.github.io/", "lucasnascimentoribeiro13@gmail.com"))

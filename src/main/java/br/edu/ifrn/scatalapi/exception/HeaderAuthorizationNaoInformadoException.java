@@ -3,7 +3,7 @@ package br.edu.ifrn.scatalapi.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.UNAUTHORIZED, reason = "O header 'Authorization' n„o foi informado")
+@ResponseStatus(code = HttpStatus.UNAUTHORIZED, reason = "O header 'Authorization' n√£o foi informado")
 public class HeaderAuthorizationNaoInformadoException extends Exception {
 
 	/**

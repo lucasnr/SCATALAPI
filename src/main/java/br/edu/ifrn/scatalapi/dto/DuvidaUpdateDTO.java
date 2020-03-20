@@ -15,8 +15,8 @@ public class DuvidaUpdateDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "O título da dúvida é obrigatório")
-	@NotEmpty(message = "O título da dúvida não pode ser vazio")
+	@NotNull(message = "O tÃ­tulo da dÃºvida Ã© obrigatÃ³rio")
+	@NotEmpty(message = "O tÃ­tulo da dÃºvida nÃ£o pode ser vazio")
 	private String titulo;
 	
 	private String descricao;

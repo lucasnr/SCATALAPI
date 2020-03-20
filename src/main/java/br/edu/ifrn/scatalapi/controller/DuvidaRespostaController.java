@@ -40,7 +40,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(value = "/duvida/{id}/resposta", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"duvida-resposta"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com as respostas de uma dúvida")
+@Api(tags = {"duvida-resposta"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÃ§Ãµes com as respostas de uma dÃºvida")
 public class DuvidaRespostaController {
 
 	@Autowired
@@ -50,13 +50,13 @@ public class DuvidaRespostaController {
 	private AlunoRepository alunoRepository;
 	
 	@GetMapping
-	@ApiOperation(value = "Busca as respostas de uma dúvida por seu ID", response = Page.class)
+	@ApiOperation(value = "Busca as respostas de uma dÃºvida por seu ID", response = Page.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Recupera com sucesso as respostas da dúvida"),
-			@ApiResponse(code = 204, message = "A dúvida não possui nenhuma resposta"), 
-			@ApiResponse(code = 404, message = "Não existe dúvida com o ID informado")})
+			@ApiResponse(code = 200, message = "Recupera com sucesso as respostas da dÃºvida"),
+			@ApiResponse(code = 204, message = "A dÃºvida nÃ£o possui nenhuma resposta"),
+			@ApiResponse(code = 404, message = "NÃ£o existe dÃºvida com o ID informado")})
 	@ApiPageable
-	public ResponseEntity<Page<RespostaResponseDTO>> findRespostasById(@ApiParam(required = true, name = "id", value = "O ID da dúvida") @PathVariable Integer id,
+	public ResponseEntity<Page<RespostaResponseDTO>> findRespostasById(@ApiParam(required = true, name = "id", value = "O ID da dÃºvida") @PathVariable Integer id,
 			@ApiIgnore @PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
 		Postagem postagem = findDuvidaOrThrowException(id);
 		Page<Postagem> respostas = postagemRepository.findRespostasByDuvidaId(paginacao, postagem.getId());
@@ -68,12 +68,12 @@ public class DuvidaRespostaController {
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	@ApiOperation(value = "Cria uma nova resposta para uma dúvida por seu ID", response = RespostaResponseDTO.class, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Cria uma nova resposta para uma dÃºvida por seu ID", response = RespostaResponseDTO.class, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 201, message = "A resposta foi criada com sucesso"), 
-			@ApiResponse(code = 400, message = "Os dados da resposta não são válidos"), 
-			@ApiResponse(code = 404, message = "Não existe dúvida com o ID informado")})
-	public ResponseEntity<RespostaResponseDTO> postResposta(@ApiParam(required = true, name = "id", value = "O ID da dúvida") @PathVariable Integer id, 
+			@ApiResponse(code = 400, message = "Os dados da resposta nÃ£o sÃ£o vÃ¡lidos"),
+			@ApiResponse(code = 404, message = "NÃ£o existe dÃºvida com o ID informado")})
+	public ResponseEntity<RespostaResponseDTO> postResposta(@ApiParam(required = true, name = "id", value = "O ID da dÃºvida") @PathVariable Integer id,
 			@RequestBody @Valid RespostaRequestDTO resposta, UriComponentsBuilder uriBuilder){
 		Postagem postagem = buildResposta(id, resposta);
 		postagemRepository.save(postagem);
@@ -93,7 +93,6 @@ public class DuvidaRespostaController {
 		postagem.setTutoria(duvida.getTutoria());
 		return postagem;
 	}
-	
 
 	private Aluno findAlunoOrThrowException(Integer id) {
 		return alunoRepository.findById(id).orElseThrow(AlunoComIdNaoEncontradoException::new);

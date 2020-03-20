@@ -16,7 +16,7 @@ public class TutoriaTutoresUpdateDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "A lista de tutores da tutoria È obrigatÛria")
-	@NotEmpty(message = "A lista de tutores da tutoria n„o pode ser vazia")
+	@NotNull(message = "A lista de tutores da tutoria √© obrigat√≥ria")
+	@NotEmpty(message = "A lista de tutores da tutoria n√£o pode ser vazia")
 	private List<MatriculaDTO> tutores;
 }

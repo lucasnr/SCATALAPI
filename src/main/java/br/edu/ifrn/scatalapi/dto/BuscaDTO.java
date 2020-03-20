@@ -15,7 +15,7 @@ public class BuscaDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "O conteúdo da busca é obrigatório")
-	@NotEmpty(message = "O conteúdo da busca não pode ser vazio")
+	@NotNull(message = "O conteÃºdo da busca Ã© obrigatÃ³rio")
+	@NotEmpty(message = "O conteÃºdo da busca nÃ£o pode ser vazio")
 	private String conteudo;
 }

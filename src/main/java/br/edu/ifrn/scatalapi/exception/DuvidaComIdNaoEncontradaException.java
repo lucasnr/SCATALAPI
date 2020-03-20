@@ -3,7 +3,7 @@ package br.edu.ifrn.scatalapi.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code=HttpStatus.NOT_FOUND, reason="O id informado não pertence a nenhuma dúvida cadastrada")
+@ResponseStatus(code=HttpStatus.NOT_FOUND, reason="O id informado nÃ£o pertence a nenhuma dÃºvida cadastrada")
 public class DuvidaComIdNaoEncontradaException extends RuntimeException {
 
 	/**

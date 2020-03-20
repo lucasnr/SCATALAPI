@@ -28,7 +28,7 @@ public class AlunoResponseDTO implements Serializable {
     @ApiModelProperty(notes = "O nome do aluno")
 	private String nome;
 
-    @ApiModelProperty(notes = "A matrícula do aluno com o SUAP")
+    @ApiModelProperty(notes = "A matrÃ­cula do aluno com o SUAP")
 	private String matricula;
 
     @ApiModelProperty(notes = "O nome usual do aluno com o SUAP")

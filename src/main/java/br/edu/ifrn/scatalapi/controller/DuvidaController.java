@@ -35,29 +35,29 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(value = "/duvida", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"duvida"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com as dúvidas")
+@Api(tags = {"duvida"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÃ§Ãµes com as dÃºvidas")
 public class DuvidaController {
 
 	@Autowired
 	private PostagemRepository repository;
 
 	@GetMapping("/{id}")
-	@ApiOperation(value = "Busca uma dúvida por seu ID", response = DuvidaResponseDTO.class)
+	@ApiOperation(value = "Busca uma dÃºvida por seu ID", response = DuvidaResponseDTO.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Recupera com sucesso a dúvida"), 
-			@ApiResponse(code = 404, message = "Não existe dúvida com o ID informado")})
-	public DuvidaResponseDTO findById(@ApiParam(required = true, name = "id", value = "O ID da dúvida a ser buscada") @PathVariable Integer id) {
+			@ApiResponse(code = 200, message = "Recupera com sucesso a dÃºvida"),
+			@ApiResponse(code = 404, message = "NÃ£o existe dÃºvida com o ID informado")})
+	public DuvidaResponseDTO findById(@ApiParam(required = true, name = "id", value = "O ID da dÃºvida a ser buscada") @PathVariable Integer id) {
 		Postagem postagem = findDuvidaOrThrowException(id);
 		return new DuvidaResponseDTO(postagem);
 	}
 	
 	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	@ApiOperation(value = "Atualiza o titulo e descrição de uma dúvida por seu ID", response = DuvidaResponseDTO.class)
+	@ApiOperation(value = "Atualiza o titulo e descriÃ§Ã£o de uma dÃºvida por seu ID", response = DuvidaResponseDTO.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Atualiza com sucesso o titulo e descrição da dúvida"), 
-			@ApiResponse(code = 404, message = "Não existe dúvida com o ID informado")})
-	public DuvidaResponseDTO updateById(@ApiParam(required = true, name = "id", value = "O ID da dúvida a ser atualizada") @PathVariable Integer id, 
+			@ApiResponse(code = 200, message = "Atualiza com sucesso o titulo e descriÃ§Ã£o da dÃºvida"),
+			@ApiResponse(code = 404, message = "NÃ£o existe dÃºvida com o ID informado")})
+	public DuvidaResponseDTO updateById(@ApiParam(required = true, name = "id", value = "O ID da dÃºvida a ser atualizada") @PathVariable Integer id,
 			@RequestBody @Valid DuvidaUpdateDTO duvida){
 		Postagem postagem = findDuvidaOrThrowException(id);
 		postagem.setTitulo(duvida.getTitulo());
@@ -67,23 +67,23 @@ public class DuvidaController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	@ApiOperation(value = "Deleta uma dúvida por seu ID", response = DuvidaResponseDTO.class)
+	@ApiOperation(value = "Deleta uma dÃºvida por seu ID", response = DuvidaResponseDTO.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 201, message = "Deleta com sucesso a dúvida"), 
-			@ApiResponse(code = 404, message = "Não existe dúvida com o ID informado")})
-	public ResponseEntity<?> deleteById(@ApiParam(required = true, name = "id", value = "O ID da dúvida a ser deletada") @PathVariable Integer id){
+			@ApiResponse(code = 201, message = "Deleta com sucesso a dÃºvida"),
+			@ApiResponse(code = 404, message = "NÃ£o existe dÃºvida com o ID informado")})
+	public ResponseEntity<?> deleteById(@ApiParam(required = true, name = "id", value = "O ID da dÃºvida a ser deletada") @PathVariable Integer id){
 		Postagem duvida = findDuvidaOrThrowException(id);
 		repository.delete(duvida);			
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/search/{query}")
-	@ApiOperation(value = "Busca dúvidas a partir de algum conteúdo", response = DuvidaResponseDTO.class)
+	@ApiOperation(value = "Busca dÃºvidas a partir de algum conteÃºdo", response = DuvidaResponseDTO.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Encontrou com sucesso uma ou mais dúvidas com o conteúdo buscado"), 
-			@ApiResponse(code = 204, message = "Não foram encontradas nenhuma dúvida com o conteúdo buscado")})
+			@ApiResponse(code = 200, message = "Encontrou com sucesso uma ou mais dÃºvidas com o conteÃºdo buscado"),
+			@ApiResponse(code = 204, message = "NÃ£o foram encontradas nenhuma dÃºvida com o conteÃºdo buscado")})
 	@ApiPageable
-	public ResponseEntity<Page<DuvidaResponseDTO>> findBySearch(@ApiParam(required = true, name = "query", value = "O conteúdo a ser buscado") @PathVariable String query, 
+	public ResponseEntity<Page<DuvidaResponseDTO>> findBySearch(@ApiParam(required = true, name = "query", value = "O conteÃºdo a ser buscado") @PathVariable String query,
 			@ApiIgnore @PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao){
 		Page<Postagem> duvidas = repository.findAnyDuvidas(paginacao, query);
 		if (duvidas.isEmpty()) 

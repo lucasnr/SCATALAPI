@@ -16,7 +16,7 @@ public class RespostaRequestDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "O id do aluno criador da resposta é obrigatório")
+	@NotNull(message = "O id do aluno criador da resposta Ã© obrigatÃ³rio")
 	@JsonProperty("aluno_id")
 	private Integer idDoAluno;
 

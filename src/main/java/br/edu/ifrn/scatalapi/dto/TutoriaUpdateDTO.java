@@ -14,10 +14,10 @@ public class TutoriaUpdateDTO implements Serializable {/**
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull(message = "O nome é um campo obrigatorio")
+	@NotNull(message = "O nome Ã© um campo obrigatorio")
 	private String nome;
 	
-	@NotNull(message = "O nome usual é um campo obrigatorio")
+	@NotNull(message = "O nome usual Ã© um campo obrigatorio")
 	@JsonProperty("nome_usual")
 	private String nomeUsual;
 }

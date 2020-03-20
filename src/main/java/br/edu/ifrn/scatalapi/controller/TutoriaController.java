@@ -34,7 +34,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping(value = "/tutoria", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"tutoria"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÁıes com as tutorias")
+@Api(tags = {"tutoria"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Opera√ß√µes com as tutorias")
 public class TutoriaController {
 
 	@Autowired
@@ -53,7 +53,7 @@ public class TutoriaController {
 	@ApiOperation(value = "Busca uma tutoria por seu ID", response = TutoriaDetalhadaResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera a tutoria com sucesso"), 
-			@ApiResponse(code = 404, message = "N„o existe tutoria com o ID informado")})
+			@ApiResponse(code = 404, message = "N√£o existe tutoria com o ID informado")})
 	public TutoriaDetalhadaResponseDTO findById(@ApiParam(required = true, name = "id", value = "O ID da tutoria") @PathVariable Integer id) {
 		Tutoria tutoria = findTutoriaOrThrowException(id);
 		return new TutoriaDetalhadaResponseDTO(tutoria);
@@ -65,8 +65,8 @@ public class TutoriaController {
 	@ApiOperation(value = "Atualiza o nome e nome usual da tutoria por seu ID", response = TutoriaDetalhadaResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Atualiza o nome e nome usual da tutoria com sucesso"), 
-			@ApiResponse(code = 400, message = "Os dados informados n„o s„o v·lidos"), 
-			@ApiResponse(code = 404, message = "N„o existe tutoria com o ID informado")})
+			@ApiResponse(code = 400, message = "Os dados informados n√£o s√£o v√°lidos"),
+			@ApiResponse(code = 404, message = "N√£o existe tutoria com o ID informado")})
 	public TutoriaDetalhadaResponseDTO uptadeById(@ApiParam(required = true, name = "id", value = "O ID da tutoria") @PathVariable Integer id, 
 			@RequestBody @Valid TutoriaUpdateDTO tutoriaDTO) {
 		Tutoria tutoria = findTutoriaOrThrowException(id);

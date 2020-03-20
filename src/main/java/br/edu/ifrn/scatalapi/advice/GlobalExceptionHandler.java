@@ -29,7 +29,7 @@ import br.edu.ifrn.suapi.exception.TokenInvalidoException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-	private static final String FILE_SIZE_LIMIT_ERROR_MESSAGE = "O tamanho do arquivo n„o pode ser maior que 5MB";
+	private static final String FILE_SIZE_LIMIT_ERROR_MESSAGE = "O tamanho do arquivo n√£o pode ser maior que 5MB";
 
 	@ExceptionHandler(value = { TokenInvalidoException.class, CredenciaisIncorretasException.class })
 	public void handleSuapExceptions(HttpServletResponse response) throws IOException {

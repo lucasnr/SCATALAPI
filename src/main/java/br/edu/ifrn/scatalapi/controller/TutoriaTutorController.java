@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping(value = "/tutoria/{id}/tutor", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"tutoria-tutor"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÁıes com os tutores de uma tutoria")
+@Api(tags = {"tutoria-tutor"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Opera√ß√µes com os tutores de uma tutoria")
 public class TutoriaTutorController {
 
 	@Autowired
@@ -52,8 +52,8 @@ public class TutoriaTutorController {
 	@ApiOperation(value = "Busca os tutores da tutoria por seu ID", response = List.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera os tutores da tutoria com sucesso"), 
-			@ApiResponse(code = 201, message = "A tutoria n„o possui nenhum tutor"), 
-			@ApiResponse(code = 404, message = "N„o existe tutoria com o ID informado")})
+			@ApiResponse(code = 201, message = "A tutoria n√£o possui nenhum tutor"),
+			@ApiResponse(code = 404, message = "N√£o existe tutoria com o ID informado")})
 	public ResponseEntity<List<AlunoResponseDTO>> findTutoresById(@ApiParam(required = true, name = "id", value = "O ID da tutoria") @PathVariable Integer id) {
 		Tutoria tutoria = findTutoriaOrThrowException(id);
 		List<Aluno> tutores = tutoria.getTutores();
@@ -69,8 +69,8 @@ public class TutoriaTutorController {
 	@ApiOperation(value = "Atualiza os tutores da tutoria por seu ID", response = TutoriaDetalhadaResponseDTO.class, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Atualiza os tutores da tutoria com sucesso"), 
-			@ApiResponse(code = 400, message = "Os dados informados n„o s„o v·lidos"), 
-			@ApiResponse(code = 404, message = "N„o existe tutoria com o ID informado")})
+			@ApiResponse(code = 400, message = "Os dados informados n√£o s√£o v√°lidos"),
+			@ApiResponse(code = 404, message = "N√£o existe tutoria com o ID informado")})
 	public ResponseEntity<TutoriaDetalhadaResponseDTO> updateTutoresById(@ApiParam(required = true, name = "id", value = "O ID da tutoria") @PathVariable Integer id,
 			@RequestBody @Valid TutoriaTutoresUpdateDTO tutoriaDTO) {
 		

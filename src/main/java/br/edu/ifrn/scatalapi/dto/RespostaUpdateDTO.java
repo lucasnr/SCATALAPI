@@ -15,8 +15,8 @@ public class RespostaUpdateDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "A descriÁ„o da resposta È obrigatÛria")
-	@NotEmpty(message = "O descriÁ„o da resposta n„o pode ser vazia")
+	@NotNull(message = "A descri√ß√£o da resposta √© obrigat√≥ria")
+	@NotEmpty(message = "O descri√ß√£o da resposta n√£o pode ser vazia")
 	private String descricao;
 	
 }

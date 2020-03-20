@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping(value = "/resposta", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"resposta"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com as respostas")
+@Api(tags = {"resposta"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÃ§Ãµes com as respostas")
 public class RespostaController {
 
 	@Autowired
@@ -39,8 +39,8 @@ public class RespostaController {
 	@GetMapping(value = "/{id}")
 	@ApiOperation(value = "Busca uma resposta por seu ID", response = DuvidaResponseDTO.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Recupera com sucesso a dúvida"), 
-			@ApiResponse(code = 404, message = "Não existe resposta com o ID informado")})
+			@ApiResponse(code = 200, message = "Recupera com sucesso a resposta"),
+			@ApiResponse(code = 404, message = "NÃ£o existe resposta com o ID informado")})
 	public RespostaResponseDTO findById(@ApiParam(required = true, name = "id", value = "O ID da resposta") @PathVariable Integer id) {
 		Postagem resposta = findRespostaOrThrowException(id);
 		return new RespostaResponseDTO(resposta);
@@ -48,10 +48,10 @@ public class RespostaController {
 	
 	@PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	@ApiOperation(value = "Atualiza a descrição de uma resposta por seu ID", response = DuvidaResponseDTO.class)
+	@ApiOperation(value = "Atualiza a descriÃ§Ã£o de uma resposta por seu ID", response = DuvidaResponseDTO.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Atualiza com sucesso a descrição da resposta"), 
-			@ApiResponse(code = 404, message = "Não existe resposta com o ID informado")})
+			@ApiResponse(code = 200, message = "Atualiza com sucesso a descriÃ§Ã£o da resposta"),
+			@ApiResponse(code = 404, message = "NÃ£o existe resposta com o ID informado")})
 	public RespostaResponseDTO updateById(@ApiParam(required = true, name = "id", value = "O ID da resposta") @PathVariable Integer id, 
 			@RequestBody @Valid RespostaUpdateDTO respostaDTO){
 		Postagem resposta = findRespostaOrThrowException(id);
@@ -64,7 +64,7 @@ public class RespostaController {
 	@ApiOperation(value = "Deleta uma resposta por seu ID")
 	@ApiResponses(value = { 
 			@ApiResponse(code = 201, message = "Deleta com sucesso a resposta"), 
-			@ApiResponse(code = 404, message = "Não existe resposta com o ID informado")})
+			@ApiResponse(code = 404, message = "NÃ£o existe resposta com o ID informado")})
 	public ResponseEntity<?> deleteById(@ApiParam(required = true, name = "id", value = "O ID da resposta") @PathVariable Integer id){
 		Postagem resposta = findRespostaOrThrowException(id);
 		repository.delete(resposta);

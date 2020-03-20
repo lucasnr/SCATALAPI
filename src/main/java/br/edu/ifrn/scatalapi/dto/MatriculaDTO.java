@@ -19,7 +19,7 @@ public class MatriculaDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "A matrÌcula È obrigatÛria")
-	@NotEmpty(message = "A matrÌcula n„o pode ser vazia")
+	@NotNull(message = "A matr√≠cula √© obrigat√≥ria")
+	@NotEmpty(message = "A matr√≠cula n√£o pode ser vazia")
 	private String matricula;
 }

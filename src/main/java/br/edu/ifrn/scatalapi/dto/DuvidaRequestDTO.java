@@ -19,13 +19,13 @@ public class DuvidaRequestDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "O título da dúvida é obrigatório")
-	@NotEmpty(message = "O título da dúvida não pode ser vazio")
+	@NotNull(message = "O tÃ­tulo da dÃºvida Ã© obrigatÃ³rio")
+	@NotEmpty(message = "O tÃ­tulo da dÃºvida nÃ£o pode ser vazio")
 	private String titulo;
 
 	private String descricao;
 
-	@NotNull(message = "O id da tutoria da dúvida é obrigatório")
+	@NotNull(message = "O id da tutoria da dÃºvida Ã© obrigatÃ³rio")
 	@JsonProperty("tutoria_id")
 	private Integer idDaTutoria;
 

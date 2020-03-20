@@ -29,7 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(value = "/tutoria/{id}/duvida", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"tutoria-duvida"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com as dúvidas de uma tutoria")
+@Api(tags = {"tutoria-duvida"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÃ§Ãµes com as dÃºvidas de uma tutoria")
 public class TutoriaDuvidaController {
 
 	@Autowired
@@ -39,11 +39,11 @@ public class TutoriaDuvidaController {
 	private PostagemRepository duvidaRepository;
 	
 	@GetMapping
-	@ApiOperation(value = "Busca as dúvidas da tutoria por seu id", response = Page.class)
+	@ApiOperation(value = "Busca as dÃºvidas da tutoria por seu id", response = Page.class)
 	@ApiResponses(value = { 
-			@ApiResponse(code = 200, message = "Recupera as dúvidas da tutoria com sucesso"), 
-			@ApiResponse(code = 201, message = "A tutoria não possui nenhuma dúvida"), 
-			@ApiResponse(code = 404, message = "Não existe tutoria com o ID informado")})
+			@ApiResponse(code = 200, message = "Recupera as dÃºvidas da tutoria com sucesso"),
+			@ApiResponse(code = 201, message = "A tutoria nÃ£o possui nenhuma dÃºvida"),
+			@ApiResponse(code = 404, message = "NÃ£o existe tutoria com o ID informado")})
 	@ApiPageable
 	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@ApiParam(required = true, name = "id", value = "O ID da tutoria") @PathVariable Integer id,
 			@ApiIgnore @PageableDefault(page=0, size=10, sort="registro", direction=Direction.DESC) Pageable paginacao) {

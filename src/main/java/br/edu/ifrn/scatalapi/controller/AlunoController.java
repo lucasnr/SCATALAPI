@@ -30,8 +30,7 @@ import br.edu.ifrn.scatalapi.exception.FileException;
 import br.edu.ifrn.scatalapi.interceptor.AutenticadoRequired;
 import br.edu.ifrn.scatalapi.model.Aluno;
 import br.edu.ifrn.scatalapi.service.AlunoService;
-import br.edu.ifrn.scatalapi.services.storage.Imagem;
-import br.edu.ifrn.scatalapi.services.storage.StorageService;
+import br.edu.ifrn.scatalapi.service.StorageService;
 import br.edu.ifrn.scatalapi.util.ApiPageable;
 import br.edu.ifrn.scatalapi.util.FileTypeValidator;
 import io.swagger.annotations.Api;
@@ -44,7 +43,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(value = "/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"aluno"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÁıes com os alunos")
+@Api(tags = {"aluno"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Opera√ß√µes com os alunos")
 public class AlunoController {
 
 	@Autowired
@@ -55,7 +54,7 @@ public class AlunoController {
 	@ApiOperation(value = "Busca todos os alunos", response = Page.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera os alunos com sucesso"), 
-			@ApiResponse(code = 204, message = "N„o existem alunos cadastrados")})
+			@ApiResponse(code = 204, message = "N√£o existem alunos cadastrados")})
 	@ApiPageable
 	public ResponseEntity<Page<AlunoResponseDTO>> findAll(
 			@ApiIgnore @PageableDefault(page = 0, size = 10, sort = "registro", direction = Direction.DESC) Pageable paginacao) {
@@ -72,7 +71,7 @@ public class AlunoController {
 	@ApiOperation(value = "Busca um aluno por seu ID", response = AlunoResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera o aluno com sucesso"),
-			@ApiResponse(code = 404, message = "N„o existe aluno com o ID informado") 
+			@ApiResponse(code = 404, message = "N√£o existe aluno com o ID informado")
 	})
 	public AlunoResponseDTO findById(@ApiParam(required = true, name = "id", value = "O ID do aluno a ser buscado") @PathVariable Integer id) {
 		Aluno aluno = findByIdOrThrowException(id);
@@ -81,12 +80,12 @@ public class AlunoController {
 
 	@GetMapping("/matricula/{matricula}")
 	@Cacheable(value = "alunoByMatricula")
-	@ApiOperation(value = "Busca um aluno por sua matrÌcula", response = AlunoResponseDTO.class)
+	@ApiOperation(value = "Busca um aluno por sua matr√≠cula", response = AlunoResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera o aluno com sucesso"),
-			@ApiResponse(code = 404, message = "N„o existe aluno com a matrÌcula informada") 
+			@ApiResponse(code = 404, message = "N√£o existe aluno com a matr√≠cula informada")
 	})
-	public AlunoResponseDTO findByMatricula(@ApiParam(required = true, name = "matricula", value = "A matrÌcula do aluno a ser buscado") @PathVariable String matricula) {
+	public AlunoResponseDTO findByMatricula(@ApiParam(required = true, name = "matricula", value = "A matr√≠cula do aluno a ser buscado") @PathVariable String matricula) {
 		Aluno aluno = service.findByMatricula(matricula).orElseThrow(AlunoComMatriculaNaoEncontradoException::new);
 		return new AlunoResponseDTO(aluno);
 	}
@@ -99,21 +98,19 @@ public class AlunoController {
 	@CacheEvict(allEntries = true, value = {"alunoByMatricula", "aluno", "alunos"})
 	public AlunoComFotoResponseDTO updateFoto(@RequestParam("file") MultipartFile file, @PathVariable("id") Integer id, HttpServletRequest req) throws IOException {
 		Aluno aluno = findByIdOrThrowException(id);
-		Imagem imagem = validFileOrThrowException(file);
-		String url = storageService.store(imagem);
+		validFileOrThrowException(file);
+		String url = storageService.store(file, aluno.getMatricula());
 		aluno.setUrlFoto(url);
 		return new AlunoComFotoResponseDTO(aluno);
 	}
 
-	private Imagem validFileOrThrowException(MultipartFile file) throws IOException {
+	private void validFileOrThrowException(MultipartFile file) throws IOException {
 		if(file == null)
-			throw new FileException("O envio do arquivo È obrigatorio");
+			throw new FileException("O envio do arquivo √© obrigatorio");
 		
 		boolean fileTypeValid = new FileTypeValidator().valid(file);
 		if(! fileTypeValid)
-			throw new FileException("O tipo do arquivo n„o È v·lido");
-		
-		return Imagem.from(file);
+			throw new FileException("O tipo do arquivo n√£o √© v√°lido");
 	}
 
 	private Aluno findByIdOrThrowException(Integer id) {

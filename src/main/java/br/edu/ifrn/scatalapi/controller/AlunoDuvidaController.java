@@ -42,7 +42,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(value = "/aluno/{id}/duvida", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"aluno-duvida"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Operações com as duvidas de um aluno")
+@Api(tags = {"aluno-duvida"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÃ§Ãµes com as dÃºvidas de um aluno")
 public class AlunoDuvidaController {
 
 	@Autowired
@@ -55,10 +55,10 @@ public class AlunoDuvidaController {
 	private TutoriaRepository tutoriaRepository;
 	
 	@GetMapping
-	@ApiOperation(value = "Busca as dúvidas de um aluno por seu ID", response = Page.class)
+	@ApiOperation(value = "Busca as dÃºvidas de um aluno por seu ID", response = Page.class)
 	@ApiResponses(value = {
-			@ApiResponse(code = 204, message = "O aluno não possui nenhuma dúvida"), 
-			@ApiResponse(code = 404, message = "Não existe aluno com o ID informado")
+			@ApiResponse(code = 204, message = "O aluno nÃ£o possui nenhuma dÃºvida"),
+			@ApiResponse(code = 404, message = "NÃ£o existe aluno com o ID informado")
 	})
 	@ApiPageable
 	public ResponseEntity<Page<DuvidaResponseDTO>> findDuvidasById(@ApiParam(required = true, name = "id", value = "O ID do aluno a ser buscado") @PathVariable Integer id,
@@ -75,13 +75,13 @@ public class AlunoDuvidaController {
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	@Transactional
-	@ApiOperation(value = "Cria uma dúvida para o aluno por seu ID", response = DuvidaResponseDTO.class , consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Cria uma dÃºvida para o aluno por seu ID", response = DuvidaResponseDTO.class , consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ApiResponses(value = {
-			@ApiResponse(code = 201, message = "Dúvida criada com sucesso"),
-			@ApiResponse(code = 400, message = "Os dados informados no corpo da requisição não são válidos"),
-			@ApiResponse(code = 404, message = "Não existe aluno ou tutoria com os respectivos IDs informados"),
+			@ApiResponse(code = 201, message = "DÃºvida criada com sucesso"),
+			@ApiResponse(code = 400, message = "Os dados informados no corpo da requisiÃ§Ã£o nÃ£o sÃ£o vÃ¡lidos"),
+			@ApiResponse(code = 404, message = "NÃ£o existe aluno ou tutoria com os respectivos IDs informados"),
 	})
-	public ResponseEntity<DuvidaResponseDTO> postDuvida(@ApiParam(required = true, name = "id", value = "O ID do aluno à quem a duvida pertence") @PathVariable Integer id,
+	public ResponseEntity<DuvidaResponseDTO> postDuvida(@ApiParam(required = true, name = "id", value = "O ID do aluno ï¿½ quem a duvida pertence") @PathVariable Integer id,
 			@RequestBody @Valid DuvidaRequestDTO duvida, UriComponentsBuilder uriBuilder) {
 		
 		Postagem postagem = buildDuvida(id, duvida);

@@ -37,7 +37,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping(value = "/aluno", produces = MediaType.APPLICATION_JSON_VALUE)
 @AutenticadoRequired
-@Api(tags = {"login"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "OperaÁıes com o login dos alunos")
+@Api(tags = {"login"}, produces = MediaType.APPLICATION_JSON_VALUE, description = "Opera√ß√µes com o login dos alunos")
 public class LoginController {
 	
 	@Autowired
@@ -55,7 +55,7 @@ public class LoginController {
 	@ApiOperation(value = "Faz login de um aluno usando suas credenciais com o SUAP e retorna o seu token", response = AlunoResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera o token do aluno com sucesso"),
-			@ApiResponse(code = 400, message = "As credenciais informadas n„o s„o v·lidas") 
+			@ApiResponse(code = 400, message = "As credenciais informadas n√£o s√£o v√°lidas")
 	})
 	public TokenDTO login(@RequestBody @Valid CredenciaisDTO credenciais) throws FalhaAoConectarComSUAPException, CredenciaisIncorretasException {
 		Token token = new Token(credenciais);
@@ -68,7 +68,7 @@ public class LoginController {
 	@ApiOperation(value = "Retorna os dados do aluno a partir do Header 'X-AUTH-TOKEN'", response = AlunoResponseDTO.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Recupera os dados do aluno com sucesso"),
-			@ApiResponse(code = 400, message = "O token n„o foi informado ou n„o È v·lido") 
+			@ApiResponse(code = 400, message = "O token n√£o foi informado ou n√£o √© v√°lido")
 	})
 	public AlunoResponseDTO findByToken(@ApiIgnore @RequestHeader(required = true, value = "X-AUTH-TOKEN") String tokenHeader) 
 			throws FalhaAoConectarComSUAPException, TokenInvalidoException {
